@@ -443,7 +443,13 @@ h1, h2, h3, h4 {
   color: #000 !important; }
 
 .home-section {
-  position: relative; }
+  position: relative;
+  height:100vh;
+  background-size:cover;
+  background-position:center;
+  background-repeat: no-repeat;
+  max-height: 600px;
+ }
   .home-section > .container {
     z-index: 2;
     position: relative; }
