@@ -1,2 +1,4 @@
-venv
+app.pyc
 __pycache__
+sql.pyc
+green_leaf.db

@@ -579,7 +579,7 @@ h1, h2, h3, h4 {
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(22, 68, 186, 0.9);
+      background: rgba(1, 107, 9, 0.9);
       z-index: 1; }
     .bg-image.overlay-primary > .container {
       position: relative;
@@ -593,7 +593,7 @@ h1, h2, h3, h4 {
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(22, 68, 186, 0.9);
+      background: rgba(1, 107, 9, 0.5);
       z-index: 1; }
     .bg-image.overlay-blue > .container {
       position: relative;
@@ -966,9 +966,9 @@ h1, h2, h3, h4 {
     padding-right: 10px;
     border-radius: 4px; }
   .custom-pagination a.active, .custom-pagination a:hover {
-    background: #1644ba;
+    background: #0f0;
     color: #fff;
-    border-color: #1644ba; }
+    border-color: #0f0; }
 
 .border-width-2 {
   border-width: 2px !important; }
