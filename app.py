@@ -72,7 +72,7 @@ def login():
         else:
             return render_template("/login.html", msg="Please supply email")
 
-  else:
+    else:
       return render_template("/login.html")
 
 # register route
@@ -101,25 +101,22 @@ def register():
     elif not address:
       flash("Please password is incorrect")
     else:
-        return render_template("login.html")
+        # Check if user is registered
+        verify_user = db.execute("SELECT * FROM users WHERE email = %s", email)
 
-      # Check if user is registered
-      verify_user = db.execute("SELECT * FROM users WHERE email = %s", email)
+        if len(verify_user) is 0:
 
-      if len(verify_user) is 0:
+            # hash password
+            hash_password = generate_password_hash(password)
 
-        # hash password
-        hash_password = generate_password_hash(password)
+            # send user details to db
+            reg_details = db.execute(
+              "INSERT INTO users (last_name, first_name, email, address, password, reg_date) VALUES (?, ?, ?, ?, ?, ?)", (last_name, first_name, email, address, hash_password, reg_date))
 
-        # send user details to db
-        reg_details = db.execute(
-          "INSERT INTO users (last_name, first_name, email, address, password, reg_date) VALUES (?, ?, ?, ?, ?, ?)", (last_name, first_name, email, address, hash_password, reg_date))
+            return json.dumps({'message': 'User created successfully!'})
 
-        return json.dumps({'message': 'User created successfully!'})
-
-      else:
-        return json.dumps({'error': str(verify_user[0]),
-                           'message': 'An account associated with this email address already exists.'})
+        else:
+          return json.dumps({'error': str(verify_user[0]),'message': 'An account associated with this email address already exists.'})
 
   except Exception as err:
     return json.dumps({'error': str(err)})
