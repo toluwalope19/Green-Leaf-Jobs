@@ -91,8 +91,8 @@ def register():
         return json.dumps({'error': str(verify_user[0]),
                            'message': 'An account associated with this email address already exists.'})
 
-  except Exception as e:
-    return json.dumps({'error': str(e)})
+  except Exception as err:
+    return json.dumps({'error': str(err)})
 
 # Admin - Delete User
 @app.route("/delete", methods=["GET", "POST"])
@@ -103,5 +103,5 @@ def delete():
     if id and request.method == 'GET':
       delete_user = db.execute("DELETE FROM users WHERE id = %s", id)
     return redirect('/')
-  except Exception as e:
-    return json.dumps({'error': str(e)})
+  except Exception as err:
+    return json.dumps({'error': str(err)})
