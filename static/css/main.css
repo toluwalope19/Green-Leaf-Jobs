@@ -153,6 +153,8 @@ iframe {
   background: rgba(108, 196, 113, 0.137);
 }
 
+.messagebox{font-size:13px;}
+
 .wrap-login100 {
   width: 500px;
   overflow: hidden;
