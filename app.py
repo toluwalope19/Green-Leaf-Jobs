@@ -4,7 +4,7 @@ import datetime
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
-
+#from helpers import loggedIn_user
 from sql import SQL
 
 # Instantiate app
@@ -33,6 +33,8 @@ Session(app)
 
 db = SQL("sqlite:///green_leaf.db")
 
+now = datetime.datetime.now()
+
 # root route
 @app.route("/")
 def index():
@@ -50,7 +52,7 @@ def login():
         if frm_email:
             if frm_password:
                 # Query database for username
-                rows = db.execute("SELECT id, email, password, user_type FROM users WHERE email = :mail", mail=frm_email)
+                rows = db.execute("SELECT id, email, password, user_type, photo FROM users WHERE email = :mail", mail=frm_email)
 
                 #Ensure username exists and password is correct
                 if len(rows) > 0:
@@ -58,11 +60,22 @@ def login():
                         # Remember which user has logged in
                         session["user_id"] = rows[0]["id"]
                         if rows[0]["user_type"] == "applicant":
-                            return render_template("/login.html", msg="You are logged-in sucessfully "+rows[0]["user_type"])
+                            l_time = now.strftime("%H:%M:%S")
+                            return render_template("/login.html", msg="You are logged-in sucessfully "+rows[0]["user_type"], logintime=l_time)
                         elif rows[0]["user_type"] == "employer":
-                            return render_template("/login.html", msg="You are logged-in sucessfully "+rows[0]["user_type"])
-                        else:
-                            return render_template("/login.html", msg="You are logged-in sucessfully "+rows[0]["user_type"])
+                            # get login time                   
+                            l_time = now.strftime("%H:%M:%S")        
+                            return render_template("/login.html", msg="You are logged-in sucessfully "+rows[0]["user_type"], logintime=l_time)
+                        else:            
+                            users_err = "No registration made yet."
+                            # get list of users      
+                            list_of_users = db.execute("SELECT * FROM users")
+                            if len(list_of_users) > 0:
+                              users = list_of_users
+                              
+                            # get login time                    
+                            l_time = now.strftime("%H:%M:%S")
+                            return render_template("/admin/index.html", msg=rows[0]["user_type"], logintime=l_time, usr=users, _err=users_err, pix=rows[0]["photo"])
                     else:
                         return render_template("/login.html", msg="Invalid password")
                 else:
@@ -79,8 +92,6 @@ def login():
 @app.route("/register", methods=["GET", "POST"])
 def register():
   """Register user"""
-  now = datetime.datetime.now()
-
   try:
     # Grab form data
     last_name = request.form.get("lastname")
@@ -132,3 +143,28 @@ def delete():
     return redirect('/')
   except Exception as err:
     return json.dumps({'error': str(err)})
+
+
+# admin page
+@app.route("/admin", methods=["GET", "POST"])
+def admin():
+  if request.method == "GET":
+    # get list of registered users
+    list_of_users = db.execute("SELECT * FROM users")
+    return render_template("/admin/admin.html", users=list_of_users, rtn="returned")
+
+    # get list of vacacies 
+
+  #else:
+    #else
+
+
+@app.route("/logout")
+def logout():
+    """Log user out"""
+    # Forget any user_id
+    session.clear()
+
+    # Redirect user to login form
+    return redirect("/login")
+
