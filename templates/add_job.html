@@ -1,78 +1,105 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Add Job Vacancies</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Livvic|Merriweather|Quicksand&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../static/css/add_job.css">
+	<title>Add Job</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="/static/vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">		
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/static/css/util.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/animated.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/main.css">
+<!--===============================================================================================-->
 </head>
 <body>
-        <div class="container">
-                <h3>Add Job</h3>
-                <hr>
-            </div>
-            
-    <div class="container1 form-wrapper">
-        
-        <form>
-            <div class="form-row">
-                <div class="form-group col-md-12">
-                    <label for="Comapny">Comapny</label>
-                    <input type="text" class="form-control" id="Comapny" name="company" placeholder="company">
-                </div>
-            </div>
-            <div class="form-row">
-                    <div class="form-group col-md-12">
-                        <label for="position">Position</label>
-                        <input type="text" class="form-control" id="position" name="position" placeholder="position">
-                    </div>
-                </div>
-                <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <label for="salary">Salary</label>
-                            <input type="number" class="form-control" id="salary" name="company" placeholder="salary">
-                        </div>
-                    </div>
-            <div class="form-row">
-                <div class="form-group col-md-12">
-                    <label for="job-type">Job-Type</label>
-                    <select class="form-control" id="job-type" name="job-type">
-                    <option>Full Time</option>
-                    <option>Part-Time</option>
-                    <option>Freelance</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-row">
-                    <div class="form-group col-md-12">
-                    <label for="description">Description</label>
-                    <textarea class="form-control" id="description" rows="3" name="description"></textarea>
-                </div>
-            </div>
-            <div class="form-row">
-                    <div class="form-group col-md-12">
-                    <label for="requirement">Requirement</label>
-                    <textarea class="form-control" id="requirement" rows="5" name="requirement"></textarea>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-12">
-                    <button type="button" class="btn btn-success btn-lg btn-block">Submit</button>
-                </div>
-            </div>
-        </form>
-    </div>
-    
+	
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="F p-l-55 p-r-55 p-t-65 p-b-50">
+				<form class="login100-form fadeInDown animated  validate-form">
+					<span class="login100-form-title p-b-33">
+						<i class="fa fa-edit"></i> Add Job
+					</span>
 
-    
-    <script
-  src="https://code.jquery.com/jquery-3.4.1.min.js"
-  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-  crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+					<div class="wrap-input100 fadeInDown animated validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+						<input class="input100" type="text" name="email" placeholder="Company">
+						<span class="focus-input100-1"></span>
+						<span class="focus-input100-2"></span>
+                    </div>
+                    
+                    <div class="wrap-input100 fadeInDown animated validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+						<input class="input100" type="text" name="email" placeholder="Position">
+						<span class="focus-input100-1"></span>
+						<span class="focus-input100-2"></span>
+                    </div>
+                    
+                    
+
+					<div class="wrap-input100 fadeInDown animated  rs1 validate-input" data-validate="Password is required">
+						<input class="input100" type="number" name="password" placeholder="Salary">
+						<span class="focus-input100-1"></span>
+						<span class="focus-input100-2"></span>
+                    </div>
+                    
+                    <div class="col-auto my-1 wrap-input100 fadeInDown animated" style="margin-left:13px;">
+                            <label class="mr-sm-2" for="inlineFormCustomSelect" style="COLOR:GRAY";>User Type</label>
+                            <select class="custom-select mr-sm-2 category" id="inlineFormCustomSelect" name="Job_function">
+                                <option>---select---</option>
+                            </select>
+                            <span class="focus-input100-1"></span>
+                            <span class="focus-input100-2"></span>
+                        </div>
+
+                        <div class="col-auto my-1 wrap-input100 fadeInDown animated" style="margin-left:13px;">
+                                <label class="mr-sm-2" for="inlineFormCustomSelect" style="COLOR:GRAY";>Job Function</label>
+                                <select class="custom-select mr-sm-2 category" id="inlineFormCustomSelect" name="Job_function">
+                                    <option>---select---</option>
+                                </select>
+                                <span class="focus-input100-1"></span>
+                                <span class="focus-input100-2"></span>
+                            </div>
+
+                    <div class="wrap-input100 fadeInDown animated  rs1 validate-input" data-validate="">
+						<textarea class="input100"  name="" rows="3" placeholder="Description" style='height:140px; padding: 25px;'></textarea>
+						<span class="focus-input100-1"></span>
+						<span class="focus-input100-2"></span>
+                    </div>
+                    
+                    <div class="wrap-input100 fadeInDown animated  rs1 validate-input" data-validate="">
+						<textarea class="input100"  name="" rows="5" placeholder="Requirements" style='height:140px; padding: 25px;'></textarea>
+						<span class="focus-input100-1"></span>
+						<span class="focus-input100-2"></span>
+					</div>
+
+					<div class="container-login100-form-btn fadeInDown animated  m-t-20">
+						<button class="login100-form-btn">
+							Submit
+						</button>
+					</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+
+	
+<!--===============================================================================================-->
+	<script src="/static/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+<!--===============================================================================================-->
+	<script src="/static/vendor/bootstrap/js/popper.js"></script>
+	<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="/static/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+<!--===============================================================================================-->
+<!--===============================================================================================-->
+	<script src="/js/main.js"></script>
+
 </body>
 </html>
