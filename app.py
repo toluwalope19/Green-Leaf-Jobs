@@ -95,10 +95,6 @@ def login():
 @app.route("/register", methods=["POST"])
 def register():
   """Register user"""
-<<<<<<< HEAD
-=======
-
->>>>>>> b3def7c5e48ea5949fcf505515a58e7f979bd321
   try:
     # Grab form data
     last_name = request.form.get("last_name")
@@ -155,7 +151,6 @@ def delete():
   except Exception as err:
     return json.dumps({'error': str(err)})
 
-<<<<<<< HEAD
 
 # admin page
 @app.route("/admin", methods=["GET", "POST"])
@@ -180,7 +175,6 @@ def logout():
     # Redirect user to login form
     return redirect("/login")
 
-=======
 # Add Vacancies route
 @app.route("/vacancies", methods=["GET", "POST"])
 def vacancies():
@@ -230,4 +224,3 @@ def application():
 
   except Exception as err:
     return json.dumps({'error': str(err)})
->>>>>>> b3def7c5e48ea5949fcf505515a58e7f979bd321
