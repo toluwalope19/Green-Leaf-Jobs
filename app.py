@@ -10,6 +10,9 @@ from sql import SQL
 # Instantiate app
 app = Flask(__name__)
 
+# Get current date and time
+now = datetime.datetime.now()
+
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -79,7 +82,6 @@ def login():
 @app.route("/register", methods=["POST"])
 def register():
   """Register user"""
-  now = datetime.datetime.now()
 
   try:
     # Grab form data
@@ -137,7 +139,7 @@ def delete():
   except Exception as err:
     return json.dumps({'error': str(err)})
 
-# Add Vacancies
+# Add Vacancies route
 @app.route("/vacancies", methods=["GET", "POST"])
 def vacancies():
   """User add vacancies"""
@@ -148,15 +150,41 @@ def vacancies():
     salary = request.form.get("salary")
     job_type = request.form.get("job_type")
     job_func_id = request.form.get("job_func_id")
+    description = request.form.get("description")
+    requirement = request.form.get("requirement")
 
     if not position or not salary or not job_type or not job_func_id or not user_id:
       #flash("All fields are required")
       return json.dumps({'message': 'All fields are required'})
     else:
-      reg_details = db.execute("INSERT INTO vacancies (user_id, position, salary, job_type, job_func_id) VALUES (:user_id, :position, :salary, :job_type, :job_func_id)",
-      user_id = user_id, position = position, salary = salary, job_type = job_type, job_func_id = job_func_id)
+      reg_details = db.execute("INSERT INTO vacancies (user_id, position, salary, job_type, job_func_id, description, requirement) VALUES (:user_id, :position, :salary, :job_type, :job_func_id, :description, :requirement)",
+      user_id = user_id, position = position, salary = salary, job_type = job_type, job_func_id = job_func_id, description = description, requirement = requirement)
 
       return json.dumps({'message': 'Job successfully uploaded!'})
+
+  except Exception as err:
+    return json.dumps({'error': str(err)})
+
+
+# Job Application route
+@app.route("/application", methods=["POST"])
+def application():
+  """User apply for job"""
+  try:
+    # user_id = session["user_id"]
+    user_id = request.form.get("user_id")
+    vacancy_id = request.form.get("vacancy_id")
+    experience = request.form.get("experience")
+    qualification = request.form.get("qualification")
+    date_time = now.strftime("%Y-%m-%d")
+
+    if not experience or not qualification:
+      return json.dumps({'message': 'All fields are required'})
+    else:
+      reg_details = db.execute("INSERT INTO application (user_id, vacancy_id, experience, qualification, date_time) VALUES (:user_id, :vacancy_id, :experience, :qualification, :date_time)",
+      user_id = user_id, vacancy_id = vacancy_id, experience = experience, qualification = qualification, date_time = date_time)
+
+      return json.dumps({'message': 'Job Application successfully!'})
 
   except Exception as err:
     return json.dumps({'error': str(err)})
