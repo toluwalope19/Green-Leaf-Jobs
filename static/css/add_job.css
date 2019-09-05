@@ -1,0 +1,15 @@
+h3 {
+    font-family: 'Merriweather', serif;
+    text-align: center;
+}
+
+div.container.form-wrapper {
+    /* padding: 5%; */
+    /* margin-left: 30%; */
+    background-color: greenyellow;
+    width: 75%;
+}
+
+label {
+    font-family:  'Quicksand', sans-serif;
+}
