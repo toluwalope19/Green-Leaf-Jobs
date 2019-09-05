@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, jsonify, session, request, json
+from flask import Flask, render_template, redirect, jsonify, session, request, json, flash
 from flask_session import Session
 import datetime
 from tempfile import mkdtemp
@@ -9,6 +9,9 @@ from sql import SQL
 
 # Instantiate app
 app = Flask(__name__)
+
+# Get current date and time
+now = datetime.datetime.now()
 
 
 # Ensure templates are auto-reloaded
@@ -54,7 +57,7 @@ def login():
 
                 #Ensure username exists and password is correct
                 if len(rows) > 0:
-                    if rows[0]["password"] == frm_password: 
+                    if check_password_hash(rows[0]["password"], frm_password):
                         # Remember which user has logged in
                         session["user_id"] = rows[0]["id"]
                         if rows[0]["user_type"] == "applicant":
@@ -76,42 +79,45 @@ def login():
       return render_template("/login.html")
 
 # register route
-@app.route("/register", methods=["GET", "POST"])
+@app.route("/register", methods=["POST"])
 def register():
   """Register user"""
-  now = datetime.datetime.now()
 
   try:
     # Grab form data
-    last_name = request.form.get("lastname")
-    first_name = request.form.get("firstname")
+    last_name = request.form.get("last_name")
+    first_name = request.form.get("first_name")
     email = request.form.get("email")
     address = request.form.get("address")
     password = request.form.get("password")
-    confirm_password = request.form.get("password")
-    reg_date = now.strftime("%d-%m-%y")
+    confirm_password = request.form.get("confirm_password")
+    user_type = request.form.get("user_type")
+    photo = "../static/images/person_1.jpg"
+    reg_date = now.strftime("%Y-%m-%d")
 
     # Validate form data
-    if not last_name and not first_name:
-      flash("Please Supply your First Name and Last Name")
+    if not last_name or not first_name:
+      return json.dumps({'message': 'Please Supply your First Name and Last Name'})
     elif not email:
       flash("Please Supply your First Name and Last Name")
     elif password != confirm_password:
-      flash("Please password is incorrect")
+      return json.dumps({'message': 'Password incorrect'})
     elif not address:
       flash("Please password is incorrect")
     else:
         # Check if user is registered
-        verify_user = db.execute("SELECT * FROM users WHERE email = %s", email)
+        verify_user = db.execute("SELECT * FROM users WHERE email = :email", email=email)
 
         if len(verify_user) is 0:
 
             # hash password
             hash_password = generate_password_hash(password)
+            #return json.dumps({'message': hash_password})
 
             # send user details to db
             reg_details = db.execute(
-              "INSERT INTO users (last_name, first_name, email, address, password, reg_date) VALUES (?, ?, ?, ?, ?, ?)", (last_name, first_name, email, address, hash_password, reg_date))
+              "INSERT INTO users (last_name, first_name, email, address, password, user_type, photo, reg_date) VALUES (:last_name, :first_name, :email, :address, :hash_password, :user_type, :photo, :reg_date)",
+              last_name=last_name, first_name=first_name, email=email, address=address, hash_password=hash_password, user_type=user_type, photo=photo, reg_date=reg_date)
 
             return json.dumps({'message': 'User created successfully!'})
 
@@ -130,5 +136,55 @@ def delete():
     if id and request.method == 'GET':
       delete_user = db.execute("DELETE FROM users WHERE id = %s", id)
     return redirect('/')
+  except Exception as err:
+    return json.dumps({'error': str(err)})
+
+# Add Vacancies route
+@app.route("/vacancies", methods=["GET", "POST"])
+def vacancies():
+  """User add vacancies"""
+  try:
+    # user_id = session["user_id"]
+    user_id = request.form.get("user_id")
+    position = request.form.get("position")
+    salary = request.form.get("salary")
+    job_type = request.form.get("job_type")
+    job_func_id = request.form.get("job_func_id")
+    description = request.form.get("description")
+    requirement = request.form.get("requirement")
+
+    if not position or not salary or not job_type or not job_func_id or not user_id:
+      #flash("All fields are required")
+      return json.dumps({'message': 'All fields are required'})
+    else:
+      reg_details = db.execute("INSERT INTO vacancies (user_id, position, salary, job_type, job_func_id, description, requirement) VALUES (:user_id, :position, :salary, :job_type, :job_func_id, :description, :requirement)",
+      user_id = user_id, position = position, salary = salary, job_type = job_type, job_func_id = job_func_id, description = description, requirement = requirement)
+
+      return json.dumps({'message': 'Job successfully uploaded!'})
+
+  except Exception as err:
+    return json.dumps({'error': str(err)})
+
+
+# Job Application route
+@app.route("/application", methods=["POST"])
+def application():
+  """User apply for job"""
+  try:
+    # user_id = session["user_id"]
+    user_id = request.form.get("user_id")
+    vacancy_id = request.form.get("vacancy_id")
+    experience = request.form.get("experience")
+    qualification = request.form.get("qualification")
+    date_time = now.strftime("%Y-%m-%d")
+
+    if not experience or not qualification:
+      return json.dumps({'message': 'All fields are required'})
+    else:
+      reg_details = db.execute("INSERT INTO application (user_id, vacancy_id, experience, qualification, date_time) VALUES (:user_id, :vacancy_id, :experience, :qualification, :date_time)",
+      user_id = user_id, vacancy_id = vacancy_id, experience = experience, qualification = qualification, date_time = date_time)
+
+      return json.dumps({'message': 'Job Application successfully!'})
+
   except Exception as err:
     return json.dumps({'error': str(err)})
