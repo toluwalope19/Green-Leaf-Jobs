@@ -3,13 +3,15 @@ h3 {
     text-align: center;
 }
 
-div.container.form-wrapper {
+.container1 {
     /* padding: 5%; */
     /* margin-left: 30%; */
     background-color: greenyellow;
-    width: 75%;
+    width: 100%;
+    max-width: 471px;
+    margin: 0 auto;
+    padding: 20px;
 }
-
 label {
     font-family:  'Quicksand', sans-serif;
 }
