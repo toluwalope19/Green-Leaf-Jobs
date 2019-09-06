@@ -30,8 +30,8 @@
 	<div class="limiter">
 		<div class="container-login100">
 
-			<div class="F p-l-55 p-r-55 p-t-65 p-b-50">
-				<form class="login100-form fadeInDown animated sign-up1  validate-form" method="post" action="/login">
+			<div class="F p-l-55 p-r-55 p-t-25 p-b-50">
+				<form class="login100-form fadeInDown animated sign-up1  validate-form" method="post" action="/register">
 					<span class="login100-form-title p-b-33" style="font-size: 27px;">
 						<i class="fa fa-user"></i> Create Account
                     </span>
@@ -40,12 +40,12 @@
 						<div class="messagebox text-warning" style="text-align: center;"><i class="fa fa-information-circle"></i> {{msg}}</div>
 
 					<div class="wrap-input100 fadeInDown animated validate-input">
-						<input class="input100" type="text" name="firstname" placeholder="Input firstname">
+						<input class="input100" type="text" name="first_name" placeholder="First name">
 						<span class="focus-input100-1"></span>
 						<span class="focus-input100-2"></span>
                     </div>
                     <div class="wrap-input100 fadeInDown animated validate-input">
-						<input class="input100" type="text" name="lastname" placeholder="Input lastname">
+						<input class="input100" type="text" name="last_name" placeholder="Last name">
 						<span class="focus-input100-1"></span>
 						<span class="focus-input100-2"></span>
 					</div>
@@ -61,19 +61,19 @@
 						<span class="focus-input100-2"></span>
                     </div>
                     <div class="wrap-input100 fadeInDown animated  rs1 validate-input" data-validate="Password is required">
-						<input class="input100" type="password" name="password" placeholder="confirm password">
+						<input class="input100" type="password" name="confirm_password" placeholder="Confirm password">
 						<span class="focus-input100-1"></span>
 						<span class="focus-input100-2"></span>
                     </div>
                    
 					<div class="wrap-input100 fadeInDown animated validate-input" >
-						<input class="input100" type="text" name="address" placeholder="Input Address">
+						<input class="input100" type="text" name="address" placeholder="Address">
 						<span class="focus-input100-1"></span>
 						<span class="focus-input100-2"></span>
 					</div>
 					<div class="col-auto my-1 wrap=input100 mr-8" style="margin-left:13px;">
-							<label class="mr-sm-2" for="inlineFormCustomSelect" style="color: gray;">User Type</label>
-							<select class="custom-select mr-sm-2 category" id="inlineFormCustomSelect">
+							<label class="mr-sm-2" for="inlineFormCustomSelect">User Type</label>
+							<select class="custom-select mr-sm-2 category" id="inlineFormCustomSelect" name="user_type">
 							  <option class="input100 " disabled selected>---select---</option>
 							  <option value="applicant">Applicant</option>
 							  <option value="employer">Employer</option>

@@ -116,52 +116,58 @@ def login():
 
 
 # register route
-@app.route("/register", methods=["POST"])
+@app.route("/register", methods=["GET","POST"])
 def register():
-  """Register user"""
-  try:
-    # Grab form data
-    last_name = request.form.get("last_name")
-    first_name = request.form.get("first_name")
-    email = request.form.get("email")
-    address = request.form.get("address")
-    password = request.form.get("password")
-    confirm_password = request.form.get("confirm_password")
-    user_type = request.form.get("user_type")
-    photo = "../static/images/person_1.jpg"
-    reg_date = now.strftime("%Y-%m-%d")
+  if request.method == "GET":
+    return render_template("/register.html")
+  else:
+    """Register user"""
+    try:
+      # Grab form data
+      last_name = request.form.get("last_name")
+      first_name = request.form.get("first_name")
+      email = request.form.get("email")
+      address = request.form.get("address")
+      password = request.form.get("password")
+      confirm_password = request.form.get("confirm_password")
+      user_type = request.form.get("user_type")
+      photo = "../static/images/person_1.jpg"
+      reg_date = now.strftime("%Y-%m-%d")
+      
+      # Validate form data
+      if not first_name:
+        return render_template("/register.html", msg='Please supply your First Name')
+      elif not last_name:
+        return render_template("/register.html", msg='Please supply your Last Name')
+      elif not email:
+        return render_template("/register.html", msg="Please supply your email")
+      elif not password:
+        return render_template("/register.html", msg="Please supply password!")
+      elif password != confirm_password:
+        return render_template("/register.html", msg='Confirm password does not match')
+      elif not address:
+        return render_template("/register.html", msg='Please password is incorrect')
+      else:
+          # Check if user is registered
+          verify_user = db.execute("SELECT * FROM users WHERE email = :email", email=email)
 
-    # Validate form data
-    if not last_name or not first_name:
-      return json.dumps({'message': 'Please Supply your First Name and Last Name'})
-    elif not email:
-      flash("Please Supply your First Name and Last Name")
-    elif password != confirm_password:
-      return json.dumps({'message': 'Password incorrect'})
-    elif not address:
-      flash("Please password is incorrect")
-    else:
-        # Check if user is registered
-        verify_user = db.execute("SELECT * FROM users WHERE email = :email", email=email)
+          if len(verify_user) is 0:
 
-        if len(verify_user) is 0:
+              # hash password
+              hash_password = generate_password_hash(password)
 
-            # hash password
-            hash_password = generate_password_hash(password)
-            #return json.dumps({'message': hash_password})
+              # send user details to db
+              reg_details = db.execute(
+                "INSERT INTO users (last_name, first_name, email, address, password, user_type, photo, reg_date) VALUES (:last_name, :first_name, :email, :address, :hash_password, :user_type, :photo, :reg_date)",
+                last_name=last_name.capitalize(), first_name=first_name.capitalize(), email=email, address=address, hash_password=hash_password, user_type=user_type, photo=photo, reg_date=reg_date)
 
-            # send user details to db
-            reg_details = db.execute(
-              "INSERT INTO users (last_name, first_name, email, address, password, user_type, photo, reg_date) VALUES (:last_name, :first_name, :email, :address, :hash_password, :user_type, :photo, :reg_date)",
-              last_name=last_name, first_name=first_name, email=email, address=address, hash_password=hash_password, user_type=user_type, photo=photo, reg_date=reg_date)
+              return render_template("/register.html", msg='User created successfully!')
 
-            return json.dumps({'message': 'User created successfully!'})
+          else:
+            return render_template("/register.html", msg='An account associated with this email address already exists.')
 
-        else:
-          return json.dumps({'error': str(verify_user[0]),'message': 'An account associated with this email address already exists.'})
-
-  except Exception as err:
-    return json.dumps({'error': str(err)})
+    except Exception as err:
+      return render_template("/register.html", msg=str(err))
 
 # Admin - Delete User
 @app.route("/delete", methods=["GET", "POST"])
