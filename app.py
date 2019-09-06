@@ -188,3 +188,27 @@ def application():
 
   except Exception as err:
     return json.dumps({'error': str(err)})
+
+
+# Add Company route
+@app.route("/company", methods=["POST"])
+def company():
+  """Company route"""
+  try:
+    # user_id = session["user_id"]
+    company_name = request.form.get("company_name")
+    address = request.form.get("address")
+    logo = request.form.get("logo")
+    user_id = request.form.get("user_id")
+    industry_id = request.form.get("industry_id")
+
+    if not company_name or not address:
+      return json.dumps({'message': 'All fields are required'})
+    else:
+      reg_details = db.execute("INSERT INTO company (company_name, address, logo, user_id, industry_id) VALUES (:company_name, :address, :logo, :user_id, :industry_id)",
+      company_name = company_name, address = address, logo = logo, user_id = user_id, industry_id = industry_id)
+
+      return json.dumps({'message': 'Company Added successfully!'})
+
+  except Exception as err:
+    return json.dumps({'error': str(err)})
