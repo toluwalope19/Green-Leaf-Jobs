@@ -298,3 +298,11 @@ def comment():
 
   except Exception as err:
     return json.dumps({'error': str(err)})
+
+
+
+
+# About route
+@app.route("/about", methods=["GET"])
+def about():
+  return render_template("/about.html")
