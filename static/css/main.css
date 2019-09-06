@@ -206,7 +206,9 @@ iframe {
   color: #555;
   line-height: 1.2;
 }
-
+.custom-select{
+  background-color: transparent;
+}
 
 /*---------------------------------------------*/
 input.input100 {
