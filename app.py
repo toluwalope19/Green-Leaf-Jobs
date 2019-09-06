@@ -4,7 +4,7 @@ import datetime
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
-#from helpers import loggedIn_user
+from helper import loggedIn_user
 from sql import SQL
 
 # Instantiate app
