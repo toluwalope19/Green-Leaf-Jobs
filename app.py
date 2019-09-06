@@ -4,7 +4,7 @@ import datetime
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
-from helper import loggedIn_user
+from helper import loggedIn_user_info
 from sql import SQL
 
 # Instantiate app
@@ -69,16 +69,39 @@ def login():
                             # get login time                   
                             l_time = now.strftime("%H:%M:%S")        
                             return render_template("/login.html", msg="You are logged-in sucessfully "+rows[0]["user_type"], logintime=l_time)
-                        else:            
-                            users_err = "No registration made yet."
+                        else:        
                             # get list of users      
                             list_of_users = db.execute("SELECT * FROM users")
+                            # get list of vacancies      
+                            list_of_vacancies = db.execute("SELECT * FROM vacancies")
+                            # get list of applications      
+                            list_of_applications = db.execute("SELECT * FROM application")
+
+                            usr =[]
+                            vac = []
+                            applitn = []
+
                             if len(list_of_users) > 0:
-                              users = list_of_users
+                              usr = list_of_users
+
+                            if len(list_of_vacancies) > 0:
+                              vac = list_of_vacancies
                               
+                            if len(list_of_applications) > 0:
+                              applitn = list_of_applications
+
                             # get login time                    
                             l_time = now.strftime("%H:%M:%S")
-                            return render_template("/admin/index.html", msg=rows[0]["user_type"], logintime=l_time, usr=users, _err=users_err, pix=rows[0]["photo"])
+
+                            return render_template(
+                              "/admin/index.html", 
+                              usertype=rows[0]["user_type"], 
+                              logintime=l_time, 
+                              users=usr, 
+                              vacancies=vac,
+                              applicantions=applitn, 
+                              pix=rows[0]["photo"]
+                            )
                     else:
                         return render_template("/login.html", msg="Invalid password")
                 else:
@@ -90,6 +113,7 @@ def login():
 
     else:
       return render_template("/login.html")
+
 
 # register route
 @app.route("/register", methods=["POST"])
@@ -152,20 +176,6 @@ def delete():
     return json.dumps({'error': str(err)})
 
 
-# admin page
-@app.route("/admin", methods=["GET", "POST"])
-def admin():
-  if request.method == "GET":
-    # get list of registered users
-    list_of_users = db.execute("SELECT * FROM users")
-    return render_template("/admin/admin.html", users=list_of_users, rtn="returned")
-
-    # get list of vacacies 
-
-  #else:
-    #else
-
-
 @app.route("/logout")
 def logout():
     """Log user out"""
@@ -178,28 +188,41 @@ def logout():
 # Add Vacancies route
 @app.route("/vacancies", methods=["GET", "POST"])
 def vacancies():
-  """User add vacancies"""
-  try:
-    # user_id = session["user_id"]
-    user_id = request.form.get("user_id")
-    position = request.form.get("position")
-    salary = request.form.get("salary")
-    job_type = request.form.get("job_type")
-    job_func_id = request.form.get("job_func_id")
-    description = request.form.get("description")
-    requirement = request.form.get("requirement")
+  rows = loggedIn_user_info(db)
+  if request.method == "GET":
+    _err = "No vacancies record found yet."
+    """User add vacancies"""
+    list_of_vacancies = db.execute("SELECT * FROM vacancies")
+    if len(list_of_vacancies) > 0:
+      vacancies = list_of_vacancies
+                              
+    # get login time                    
+    l_time = now.strftime("%H:%M:%S")
+    return render_template("/admin/index.html", msg=rows[0]["user_type"], logintime=l_time, vacancies=vacancies, _err=_err, pix=rows[0]["photo"])
 
-    if not position or not salary or not job_type or not job_func_id or not user_id:
-      #flash("All fields are required")
-      return json.dumps({'message': 'All fields are required'})
-    else:
-      reg_details = db.execute("INSERT INTO vacancies (user_id, position, salary, job_type, job_func_id, description, requirement) VALUES (:user_id, :position, :salary, :job_type, :job_func_id, :description, :requirement)",
-      user_id = user_id, position = position, salary = salary, job_type = job_type, job_func_id = job_func_id, description = description, requirement = requirement)
+  else:
+    try:
+      # user_id = session["user_id"]
+      user_id = request.form.get("user_id")
+      position = request.form.get("position")
+      salary = request.form.get("salary")
+      job_type = request.form.get("job_type")
+      job_func_id = request.form.get("job_func_id")
+      description = request.form.get("description")
+      requirement = request.form.get("requirement")
 
-      return json.dumps({'message': 'Job successfully uploaded!'})
+      if not position or not salary or not job_type or not job_func_id or not user_id:
+        #flash("All fields are required")
+        return json.dumps({'message': 'All fields are required'})
+      else:
+        reg_details = db.execute("INSERT INTO vacancies (user_id, position, salary, job_type, job_func_id, description, requirement) VALUES (:user_id, :position, :salary, :job_type, :job_func_id, :description, :requirement)",
+        user_id = user_id, position = position, salary = salary, job_type = job_type, job_func_id = job_func_id, description = description, requirement = requirement)
 
-  except Exception as err:
-    return json.dumps({'error': str(err)})
+        return json.dumps({'message': 'Job successfully uploaded!'})
+
+    except Exception as err:
+      return json.dumps({'error': str(err)})
+  
 
 
 # Job Application route
