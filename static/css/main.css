@@ -150,7 +150,7 @@ iframe {
   justify-content: center;
   align-items: center;
   padding: 15px;
-  background: rgba(108, 196, 113, 0.137);
+  background: rgba(108, 196, 112, 0.404);
 }
 
 .messagebox{font-size:13px;}
@@ -181,7 +181,8 @@ iframe {
   line-height: 1.2;
   text-align: center;
   font-size:35px;
-  width:300px;
+  width:100%x;
+  text-transform: uppercase;
 }
 
 /*------------------------------------------------------------------
@@ -191,6 +192,7 @@ iframe {
   width: 100%;
   position: relative;
   border-bottom: 1px solid #e6e6e6;
+  color:#555;
 }
 
 .wrap-input100.rs1 {
@@ -208,6 +210,11 @@ iframe {
 }
 .custom-select{
   background-color: transparent;
+  margin-top:10px;
+  width:78%;
+  border:0px;
+  color:#aaa
+  ;
 }
 
 /*---------------------------------------------*/
@@ -311,6 +318,7 @@ input.input100 {
   }
 }
 
+.col-auto label{color:#888;}
 
 /*------------------------------------------------------------------
 [ Button ]*/

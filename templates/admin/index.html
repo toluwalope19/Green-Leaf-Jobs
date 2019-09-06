@@ -1,0 +1,291 @@
+<!doctype html>
+<html>
+    <head>
+            <link rel="stylesheet" type="text/css" href="../static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">	
+            <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
+        <title>Green Leaf Jobs | Admin</title>
+        <style>
+            body{margin:0px; font-family: arial;background: rgba(122, 240, 128, 0.123); color:#666;}
+            a{text-decoration: none; color:green;} a:hover{text-decoration: none;}
+            div{background: transparent;}
+            .aside{
+                width:200px;
+                position:fixed;
+                height: 100%;
+                background: #fff;
+                transition:width ease-in .5s;
+                overflow: hidden;
+            }
+            .main-side{margin-left:200px;transition:margin ease-in .5s;}
+            .displday{display: none;}
+            .bordered{border:1px solid grey;}
+            .header-bar{background: rgba(122, 240, 127, 0.301);color:green; 
+                height: 85px; overflow: hidden; padding:20px;
+                line-height:25px;
+            }
+            .summary-stats{height:140px; padding:20px; width:100%; box-sizing:border-box;}
+            .user-profile{width:150px; height:150px; margin:0px auto; border-radius:100%; border:5px solid #bfb; margin:20px; overflow: hidden;}
+            .user-profile img{width:inherit; height:inherit;}
+            .admin-menu{font-size: 14px;text-align: center; padding:20px 2px;}
+            .admin-menu a{border-bottom:1px solid #6f6; display: block;}
+            .admin-menu a:hover{background:rgba(78, 245, 56, 0.055);}
+            .admin-menu a:first-child{border-top:1px solid #6f6;}
+            .admin-menu a .active{border-left:5px solid rgb(78, 245, 56); background:rgba(78, 245, 56, 0.26); border-top:0px; border-bottom:0px;}
+            .admin-menu a span{display:block; padding:10px;}
+            th{text-transform: capitalize; background: #6c6; color:#cfc;}
+            .tab-bar{padding:20px 0px; font-weight:bold; color:green;}
+            table{width:100%; border-collapse: collapse;}
+            table td, table th{padding:10px; text-align: left;}
+            .logout{width:45%; min-width:300px; text-align: right; display:inline-block; float:right; clear:right;}
+        </style>
+    </head>
+    <body>
+        <div class="main-container">
+            <div class='aside' id="asideBox">
+                <div style="background: rgba(122, 240, 128, 0.938); padding:20px; box-sizing: border-box;" >
+                    <a href="#" style="font-size:30px; text-transform:capitalize;"><b><span style="color:white;">Green</span><span style="color:green;">Leaf</b></span></a>
+                </div>
+                <div class='user-profile bordered'>
+                    <img src="{{pix}}">
+                </div>
+                <div style="font-size: 12px;text-align: center;">
+                    <b>Logged-in at {{logintime}}</b>
+                </div>
+                <div class="admin-menu">
+                    <a href='javascript:void()'><span class='active nav-list' name="users-nav">Users</span></a>
+                    <a href='javascript:void()'><span class='nav-list' name="vac-nav">Vacancies</span></a>
+                    <a href='javascript:void()'><span class='nav-list' name="app-nav">Applications</span></a>
+                    <a href='javascript:void()'><span class='nav-list'>Add Jobs</span></a>
+                    <a href='javascript:void()'><span class='nav-list'>Setting</span></a>
+                </div>
+            </div>
+            <div class="main-side" id="mainBox">
+                <div class='header-bar'><a href="#" id='navicon'><i class='fa fa-navicon fa-2x'></i></a> 
+                    <span class="logout">
+                        <i class='fa fa-user'></i> <small></small>Logged-in as {{usertype}}</small> &nbsp; | &nbsp; <a href='../../logout'><font color="#f66"><i class='fa fa-power-off'></i> Log-out</font></a>
+                    </span>
+                </div>
+                
+                <div class='summary-stats'><div class='summary-stats bordered' style="border-color:#6f6;"></div></div>
+
+            <!--- users display table--->
+                <div id='users' class="display">                
+                <div class='main-display-area'>
+                    <div style="padding:20px;">
+                        <div class="users-table">
+                            <div class='tab-bar'>
+                                <div>REGISTERED USERS RECORDS</div>
+                            </div>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>last name</th>
+                                        <th>first name</th>
+                                        <th>email</th>
+                                        <th>address</th>
+                                        <th>user type</th>
+                                        <th><center>action</center></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for user in users %}
+                                    <tr>
+                                        <td>{{user["last_name"]}}</td>
+                                        <td>{{user["first_name"]}}</td>
+                                        <td>{{user["email"]}}</td>
+                                        <td>{{user["address"]}}</td>
+                                        <td>{{user["user_type"]}}</td>
+                                        <td><center><a href="#"><i class="fa fa-trash"></i></a></center></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                                <tfoot></tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--- end of users display table--->
+
+            <!--- vacancies display table--->
+            <div id="vacancies" class="display">
+                <div class='main-display-area'>
+                    <div style="padding:20px;">
+                        <div class="users-table">
+                            <div class='tab-bar'>
+                                <div>JOB VACANCIES RECORDS</div>
+                            </div>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>added by</th>
+                                        <th>position</th>
+                                        <th>salary</th>
+                                        <th>job type</th>
+                                        <th>job function</th>
+                                        <th>description</th>
+                                        <th>requirement</th>
+                                        <th><center>action</center></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for vacancy in vacancies %}
+                                    <tr>
+                                        <td>{{vacancy["added_by"]}}</td>
+                                        <td>{{vacancy["position"]}}</td>
+                                        <td>{{vacancy["salary"]}}</td>
+                                        <td>{{vacancy["job_type"]}}</td>
+                                        <td>{{vacancy["job_func_id"]}}</td>
+                                        <td>{{vacancy["description"]}}</td>
+                                        <td>{{vacancy["requirement"]}}</td>
+                                        <td><center><a href="#"><i class="fa fa-trash"></i></a></center></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                                <tfoot></tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--- end of vacancies display table--->
+
+            <!--- applications display table--->
+            <div id="applications" class="display">                
+                <div class='main-display-area'>
+                    <div style="padding:20px;">
+                        <div class="users-table">
+                            <div class='tab-bar'>
+                                <div>APPLICATION RECORDS</div>
+                            </div>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>added by</th>
+                                        <th>vacancy</th>
+                                        <th>experience</th>
+                                        <th>qualification</th>
+                                        <th>added on</th>
+                                        <th><center>action</center></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for appt in applitn %}
+                                    <tr>
+                                        <td>{{appt["added_by"]}}</td>
+                                        <td>{{appt["vacancy_id"]}}</td>
+                                        <td>{{appt["experience"]}}</td>
+                                        <td>{{appt["qualification"]}}</td>
+                                        <td>{{appt["date_time"]}}</td>
+                                        <td><center><a href="#"><i class="fa fa-trash"></i></a></center></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                                <tfoot></tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--- end of applications display table--->
+
+            </div>
+
+
+
+        </div>
+    </body>
+</html>
+
+<script>
+    // target html objects
+    let assideBox = document.getElementById("asideBox")
+    let mainBox =  document.getElementById("mainBox")
+    let nicon =  document.getElementById("navicon")
+
+    // set a toggle flag
+    let flag=0
+
+    //  perform show toggle
+    function showMenu(){
+        assideBox.style.width = "0px"
+        mainBox.style.marginLeft = "0px"
+        flag = 1
+    }
+    //  perform hide toggle
+    function hideMenu(){
+        assideBox.style.width = "200px"
+        mainBox.style.marginLeft = "200px"
+        flag = 0
+    }
+
+    // togglge based on current flag value
+    nicon.addEventListener("click", toggleMenu)
+    function toggleMenu(){
+        if(flag == 0){
+            showMenu()
+        }else{
+            hideMenu()
+        }
+            
+    }
+    
+    // perform toggle event when the screen goes beyound or less than 800
+    window.onresize = function(){
+        if(window.innerWidth < 800){
+            showMenu()
+        }else{
+            hideMenu()
+        }
+    }
+
+    /********************************************************/
+    let tbls = document.getElementsByClassName("display")
+    let navs =  document.getElementsByClassName("nav-list")
+    tblIndex = 0
+    navIndex = 0
+    /********************************************************/
+    
+    // hide all display table
+    function hideAllTables(){
+        for(i=0; i<tbls.length; i++){
+            tbls[i].style.display = "none"
+        }
+    } 
+    // deactivate any active menu-bar
+    function removeActiveMenu(){
+        for(i=0; i<navs.length; i++){
+            navs[i].classList.remove("active")
+        }
+    }
+    // display the first table as default
+    function displayTbl(x){
+        hideAllTables()
+        tbls[x].style.display = "block"
+    }
+    function setActiveNav(x){
+        removeActiveMenu()
+        navs[x].classList.add("active")
+    }
+
+    // set default view
+    displayTbl(tblIndex)
+    setActiveNav(navIndex)
+    
+    let contentLen = 0
+    contentLen = navs.length < tbls.length? navs.length:tbls.length;
+    
+    for(j=0; j<contentLen; j++){
+        navs[j].addEventListener("click", seCurrentNav);
+    }
+    function seCurrentNav(){
+        for(k=0; k<contentLen; k++){
+            if(navs[k].isEqualNode(this)){
+                displayTbl(k)
+                setActiveNav(k)
+            }
+        }
+        
+    }
+
+</script>

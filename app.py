@@ -4,7 +4,7 @@ import datetime
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
-
+from helper import loggedIn_user_info
 from sql import SQL
 
 # Instantiate app
@@ -36,6 +36,8 @@ Session(app)
 
 db = SQL("sqlite:///green_leaf.db")
 
+now = datetime.datetime.now()
+
 # root route
 @app.route("/")
 def index():
@@ -53,7 +55,7 @@ def login():
         if frm_email:
             if frm_password:
                 # Query database for username
-                rows = db.execute("SELECT id, email, password, user_type FROM users WHERE email = :mail", mail=frm_email)
+                rows = db.execute("SELECT id, email, password, user_type, photo FROM users WHERE email = :mail", mail=frm_email)
 
                 #Ensure username exists and password is correct
                 if len(rows) > 0:
@@ -61,11 +63,45 @@ def login():
                         # Remember which user has logged in
                         session["user_id"] = rows[0]["id"]
                         if rows[0]["user_type"] == "applicant":
-                            return render_template("/login.html", msg="You are logged-in sucessfully "+rows[0]["user_type"])
+                            l_time = now.strftime("%H:%M:%S")
+                            return render_template("/login.html", msg="You are logged-in sucessfully "+rows[0]["user_type"], logintime=l_time)
                         elif rows[0]["user_type"] == "employer":
-                            return render_template("/login.html", msg="You are logged-in sucessfully "+rows[0]["user_type"])
-                        else:
-                            return render_template("/login.html", msg="You are logged-in sucessfully "+rows[0]["user_type"])
+                            # get login time                   
+                            l_time = now.strftime("%H:%M:%S")        
+                            return render_template("/login.html", msg="You are logged-in sucessfully "+rows[0]["user_type"], logintime=l_time)
+                        else:        
+                            # get list of users      
+                            list_of_users = db.execute("SELECT * FROM users")
+                            # get list of vacancies      
+                            list_of_vacancies = db.execute("SELECT * FROM vacancies")
+                            # get list of applications      
+                            list_of_applications = db.execute("SELECT * FROM application")
+
+                            usr =[]
+                            vac = []
+                            applitn = []
+
+                            if len(list_of_users) > 0:
+                              usr = list_of_users
+
+                            if len(list_of_vacancies) > 0:
+                              vac = list_of_vacancies
+                              
+                            if len(list_of_applications) > 0:
+                              applitn = list_of_applications
+
+                            # get login time                    
+                            l_time = now.strftime("%H:%M:%S")
+
+                            return render_template(
+                              "/admin/index.html", 
+                              usertype=rows[0]["user_type"], 
+                              logintime=l_time, 
+                              users=usr, 
+                              vacancies=vac,
+                              applicantions=applitn, 
+                              pix=rows[0]["photo"]
+                            )
                     else:
                         return render_template("/login.html", msg="Invalid password")
                 else:
@@ -78,54 +114,60 @@ def login():
     else:
       return render_template("/login.html")
 
+
 # register route
-@app.route("/register", methods=["POST"])
+@app.route("/register", methods=["GET","POST"])
 def register():
-  """Register user"""
+  if request.method == "GET":
+    return render_template("/register.html")
+  else:
+    """Register user"""
+    try:
+      # Grab form data
+      last_name = request.form.get("last_name")
+      first_name = request.form.get("first_name")
+      email = request.form.get("email")
+      address = request.form.get("address")
+      password = request.form.get("password")
+      confirm_password = request.form.get("confirm_password")
+      user_type = request.form.get("user_type")
+      photo = "../static/images/person_1.jpg"
+      reg_date = now.strftime("%Y-%m-%d")
+      
+      # Validate form data
+      if not first_name:
+        return render_template("/register.html", msg='Please supply your First Name')
+      elif not last_name:
+        return render_template("/register.html", msg='Please supply your Last Name')
+      elif not email:
+        return render_template("/register.html", msg="Please supply your email")
+      elif not password:
+        return render_template("/register.html", msg="Please supply password!")
+      elif password != confirm_password:
+        return render_template("/register.html", msg='Confirm password does not match')
+      elif not address:
+        return render_template("/register.html", msg='Please password is incorrect')
+      else:
+          # Check if user is registered
+          verify_user = db.execute("SELECT * FROM users WHERE email = :email", email=email)
 
-  try:
-    # Grab form data
-    last_name = request.form.get("last_name")
-    first_name = request.form.get("first_name")
-    email = request.form.get("email")
-    address = request.form.get("address")
-    password = request.form.get("password")
-    confirm_password = request.form.get("confirm_password")
-    user_type = request.form.get("user_type")
-    photo = "../static/images/person_1.jpg"
-    reg_date = now.strftime("%Y-%m-%d")
+          if len(verify_user) is 0:
 
-    # Validate form data
-    if not last_name or not first_name:
-      return json.dumps({'message': 'Please Supply your First Name and Last Name'})
-    elif not email:
-      flash("Please Supply your First Name and Last Name")
-    elif password != confirm_password:
-      return json.dumps({'message': 'Password incorrect'})
-    elif not address:
-      flash("Please password is incorrect")
-    else:
-        # Check if user is registered
-        verify_user = db.execute("SELECT * FROM users WHERE email = :email", email=email)
+              # hash password
+              hash_password = generate_password_hash(password)
 
-        if len(verify_user) is 0:
+              # send user details to db
+              reg_details = db.execute(
+                "INSERT INTO users (last_name, first_name, email, address, password, user_type, photo, reg_date) VALUES (:last_name, :first_name, :email, :address, :hash_password, :user_type, :photo, :reg_date)",
+                last_name=last_name.capitalize(), first_name=first_name.capitalize(), email=email, address=address, hash_password=hash_password, user_type=user_type, photo=photo, reg_date=reg_date)
 
-            # hash password
-            hash_password = generate_password_hash(password)
-            #return json.dumps({'message': hash_password})
+              return render_template("/register.html", msg='User created successfully!')
 
-            # send user details to db
-            reg_details = db.execute(
-              "INSERT INTO users (last_name, first_name, email, address, password, user_type, photo, reg_date) VALUES (:last_name, :first_name, :email, :address, :hash_password, :user_type, :photo, :reg_date)",
-              last_name=last_name, first_name=first_name, email=email, address=address, hash_password=hash_password, user_type=user_type, photo=photo, reg_date=reg_date)
+          else:
+            return render_template("/register.html", msg='An account associated with this email address already exists.')
 
-            return json.dumps({'message': 'User created successfully!'})
-
-        else:
-          return json.dumps({'error': str(verify_user[0]),'message': 'An account associated with this email address already exists.'})
-
-  except Exception as err:
-    return json.dumps({'error': str(err)})
+    except Exception as err:
+      return render_template("/register.html", msg=str(err))
 
 # Admin - Delete User
 @app.route("/delete", methods=["GET", "POST"])
@@ -139,31 +181,54 @@ def delete():
   except Exception as err:
     return json.dumps({'error': str(err)})
 
+
+@app.route("/logout")
+def logout():
+    """Log user out"""
+    # Forget any user_id
+    session.clear()
+
+    # Redirect user to login form
+    return redirect("/login")
+
 # Add Vacancies route
 @app.route("/vacancies", methods=["GET", "POST"])
 def vacancies():
-  """User add vacancies"""
-  try:
-    # user_id = session["user_id"]
-    user_id = request.form.get("user_id")
-    position = request.form.get("position")
-    salary = request.form.get("salary")
-    job_type = request.form.get("job_type")
-    job_func_id = request.form.get("job_func_id")
-    description = request.form.get("description")
-    requirement = request.form.get("requirement")
+  rows = loggedIn_user_info(db)
+  if request.method == "GET":
+    _err = "No vacancies record found yet."
+    """User add vacancies"""
+    list_of_vacancies = db.execute("SELECT * FROM vacancies")
+    if len(list_of_vacancies) > 0:
+      vacancies = list_of_vacancies
+                              
+    # get login time                    
+    l_time = now.strftime("%H:%M:%S")
+    return render_template("/admin/index.html", msg=rows[0]["user_type"], logintime=l_time, vacancies=vacancies, _err=_err, pix=rows[0]["photo"])
 
-    if not position or not salary or not job_type or not job_func_id or not user_id:
-      #flash("All fields are required")
-      return json.dumps({'message': 'All fields are required'})
-    else:
-      reg_details = db.execute("INSERT INTO vacancies (user_id, position, salary, job_type, job_func_id, description, requirement) VALUES (:user_id, :position, :salary, :job_type, :job_func_id, :description, :requirement)",
-      user_id = user_id, position = position, salary = salary, job_type = job_type, job_func_id = job_func_id, description = description, requirement = requirement)
+  else:
+    try:
+      # user_id = session["user_id"]
+      user_id = request.form.get("user_id")
+      position = request.form.get("position")
+      salary = request.form.get("salary")
+      job_type = request.form.get("job_type")
+      job_func_id = request.form.get("job_func_id")
+      description = request.form.get("description")
+      requirement = request.form.get("requirement")
 
-      return json.dumps({'message': 'Job successfully uploaded!'})
+      if not position or not salary or not job_type or not job_func_id or not user_id:
+        #flash("All fields are required")
+        return json.dumps({'message': 'All fields are required'})
+      else:
+        reg_details = db.execute("INSERT INTO vacancies (user_id, position, salary, job_type, job_func_id, description, requirement) VALUES (:user_id, :position, :salary, :job_type, :job_func_id, :description, :requirement)",
+        user_id = user_id, position = position, salary = salary, job_type = job_type, job_func_id = job_func_id, description = description, requirement = requirement)
 
-  except Exception as err:
-    return json.dumps({'error': str(err)})
+        return json.dumps({'message': 'Job successfully uploaded!'})
+
+    except Exception as err:
+      return json.dumps({'error': str(err)})
+  
 
 
 # Job Application route
