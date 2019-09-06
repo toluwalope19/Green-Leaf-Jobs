@@ -195,7 +195,6 @@ def application():
 def company():
   """Company route"""
   try:
-    # user_id = session["user_id"]
     company_name = request.form.get("company_name")
     address = request.form.get("address")
     logo = request.form.get("logo")
@@ -207,6 +206,28 @@ def company():
     else:
       reg_details = db.execute("INSERT INTO company (company_name, address, logo, user_id, industry_id) VALUES (:company_name, :address, :logo, :user_id, :industry_id)",
       company_name = company_name, address = address, logo = logo, user_id = user_id, industry_id = industry_id)
+
+      return json.dumps({'message': 'Company Added successfully!'})
+
+  except Exception as err:
+    return json.dumps({'error': str(err)})
+
+
+# Add Comment route
+@app.route("/comment", methods=["POST"])
+def comment():
+  """Comment route"""
+  try:
+    user_id = request.form.get("user_id")
+    comment = request.form.get("comment")
+    date_time = now.strftime("%Y-%m-%d")
+
+    if not comment:
+      return json.dumps({'message': 'Please enter your comment'})
+    else:
+      reg_details = db.execute(
+        "INSERT INTO comments (user_id, comment, date_time) VALUES (:user_id, :comment, :date_time)",
+        user_id = user_id, comment = comment, date_time = date_time)
 
       return json.dumps({'message': 'Company Added successfully!'})
 
