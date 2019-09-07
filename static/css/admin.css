@@ -1,0 +1,25 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:200,300,400,700");
+
+.navbar{
+    border-top-left-radius: 20px;
+    height: 70px;
+}
+
+
+.sidebar{
+    float: left;
+    margin-left: -197px;
+    padding-top:50px;
+    line-height: 80px;
+    font-size: 11px;
+    height:683px;
+    width: 200px;
+    background-color:rgba(16, 231, 145, 0.551);
+    border-bottom-left-radius: 20px;
+}
+.sidebar li{
+    list-style: none;
+}
+.sidebar li a{
+    color:rgba(128, 128, 128, 0.952);
+}
