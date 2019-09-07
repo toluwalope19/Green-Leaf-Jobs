@@ -55,7 +55,7 @@ def login():
         if frm_email:
             if frm_password:
                 # Query database for username
-                rows = db.execute("SELECT id, email, password, user_type, photo FROM users WHERE email = :mail", mail=frm_email)
+                rows = db.execute("SELECT first_name, last_name, id, email, password, user_type, photo FROM users WHERE email = :mail", mail=frm_email)
 
                 #Ensure username exists and password is correct
                 if len(rows) > 0:
@@ -67,8 +67,22 @@ def login():
                             return render_template("/login.html", msg="You are logged-in sucessfully "+rows[0]["user_type"], logintime=l_time)
                         elif rows[0]["user_type"] == "employer":
                             # get login time                   
-                            l_time = now.strftime("%H:%M:%S")        
-                            return render_template("/login.html", msg="You are logged-in sucessfully "+rows[0]["user_type"], logintime=l_time)
+                            l_time = now.strftime("%H:%M:%S")    
+                            
+                            # get list of vacancies      
+                            list_of_vacancies = db.execute("SELECT * FROM vacancies")
+                            vac = []
+                            if len(list_of_vacancies) > 0:
+                              vac = list_of_vacancies
+
+                            return render_template(
+                              "/employer/index.html", 
+                              usertype=rows[0]["user_type"], 
+                              logintime=l_time, 
+                              vacancies=vac,
+                              pix=rows[0]["photo"],
+                              name=rows[0]["first_name"]+" "+rows[0]["last_name"], 
+                            )
                         else:        
                             # get list of users      
                             list_of_users = db.execute("SELECT * FROM users")
@@ -100,7 +114,8 @@ def login():
                               users=usr, 
                               vacancies=vac,
                               applicantions=applitn, 
-                              pix=rows[0]["photo"]
+                              pix=rows[0]["photo"],
+                              name=rows[0]["first_name"]+" "+rows[0]["last_name"], 
                             )
                     else:
                         return render_template("/login.html", msg="Invalid password")
@@ -301,8 +316,14 @@ def comment():
 
 
 
-
 # About route
 @app.route("/about", methods=["GET"])
 def about():
   return render_template("/about.html")
+
+
+# employer route
+@app.route("/employer", methods=["GET", "POST"])
+def employer():
+  return render_template("/employer/index.html")
+

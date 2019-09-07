@@ -150,7 +150,7 @@ iframe {
   justify-content: center;
   align-items: center;
   padding: 15px;
-  background: rgba(108, 196, 112, 0.404);
+  background: rgba(108, 196, 112, 0.267);
 }
 
 .messagebox{font-size:13px;}
@@ -191,7 +191,7 @@ iframe {
 .wrap-input100 {
   width: 100%;
   position: relative;
-  border-bottom: 1px solid #e6e6e6;
+  border-bottom: 1px solid #478d453b;
   color:#555;
 }
 
