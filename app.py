@@ -340,89 +340,6 @@ def about():
 def employer():
   return render_template("/employer/index.html")
 
-# Job Application route
-@app.route("/application", methods=["POST"])
-def application():
-  """User apply for job"""
-  try:
-    # user_id = session["user_id"]
-    user_id = request.form.get("user_id")
-    vacancy_id = request.form.get("vacancy_id")
-    experience = request.form.get("experience")
-    qualification = request.form.get("qualification")
-    date_time = now.strftime("%Y-%m-%d")
-
-    if not experience or not qualification:
-      return json.dumps({'message': 'All fields are required'})
-    else:
-      reg_details = db.execute("INSERT INTO application (user_id, vacancy_id, experience, qualification, date_time) VALUES (:user_id, :vacancy_id, :experience, :qualification, :date_time)",
-      user_id = user_id, vacancy_id = vacancy_id, experience = experience, qualification = qualification, date_time = date_time)
-
-      return json.dumps({'message': 'Job Application successfully!'})
-
-  except Exception as err:
-    return json.dumps({'error': str(err)})
-
-
-# Add Company route
-@app.route("/company", methods=["POST"])
-def company():
-  """Company route"""
-  try:
-    company_name = request.form.get("company_name")
-    address = request.form.get("address")
-    logo = request.form.get("logo")
-    user_id = request.form.get("user_id")
-    industry_id = request.form.get("industry_id")
-
-    if not company_name or not address:
-      return json.dumps({'message': 'All fields are required'})
-    else:
-      reg_details = db.execute("INSERT INTO company (company_name, address, logo, user_id, industry_id) VALUES (:company_name, :address, :logo, :user_id, :industry_id)",
-      company_name = company_name, address = address, logo = logo, user_id = user_id, industry_id = industry_id)
-
-      return json.dumps({'message': 'Company Added successfully!'})
-
-  except Exception as err:
-    return json.dumps({'error': str(err)})
-
-
-# Add Comment route
-@app.route("/comment", methods=["POST"])
-def comment():
-  """Comment route"""
-  try:
-    user_id = request.form.get("user_id")
-    comment = request.form.get("comment")
-    date_time = now.strftime("%Y-%m-%d")
-
-    if not comment:
-      return json.dumps({'message': 'Please enter your comment'})
-    else:
-      reg_details = db.execute(
-        "INSERT INTO comments (user_id, comment, date_time) VALUES (:user_id, :comment, :date_time)",
-        user_id = user_id, comment = comment, date_time = date_time)
-
-      return json.dumps({'message': 'Company Added successfully!'})
-
-  except Exception as err:
-    return json.dumps({'error': str(err)})
-
-
-
-# About route
-@app.route("/about", methods=["GET"])
-def about():
-  return render_template("/about.html")
-
-
-# employer route
-@app.route("/employer", methods=["GET", "POST"])
-def employer():
-  return render_template("/employer/index.html")
-
-
-
 # contact route
 @app.route("/contact", methods=["GET","POST"])
 def contact():
@@ -449,9 +366,9 @@ def contact():
         return render_template("/contact.html", msg=str(err))
       
       
-  # job_listing route
-@app.route("/job_listing", methods=["GET","POST"])
-def job_listing():
+#   # job_listing route
+# @app.route("/job_listing", methods=["GET","POST"])
+# def job_listing():
       
               
   
