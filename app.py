@@ -4,7 +4,7 @@ import datetime
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
-from helper import loggedIn_user_info
+from helper import loggedIn_user_info, job_function, ind_function, loctn_function
 from sql import SQL
 
 # Instantiate app
@@ -25,9 +25,6 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
-# Custom filter
-#app.jinja_env.filters["usd"] = usd
-
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_FILE_DIR"] = mkdtemp()
 app.config["SESSION_PERMANENT"] = False
@@ -41,7 +38,10 @@ now = datetime.datetime.now()
 # root route
 @app.route("/")
 def index():
-    return render_template('index.html')
+    jobs = job_function(db)
+    industries = ind_function(db)
+    locations = loctn_function(db)
+    return render_template('index.html', jobs=jobs, industries=industries, locations=locations)
 
 # login route
 @app.route("/login", methods=["GET", "POST"])
@@ -319,8 +319,6 @@ def comment():
   except Exception as err:
     return json.dumps({'error': str(err)})
 
-
-
 # About route
 @app.route("/about", methods=["GET"])
 def about():
@@ -333,7 +331,7 @@ def employer():
   return render_template("/employer/index.html")
 
 # Job Listing route
-@app.route("/job-listings", methods=["GET", "POST"])
+@app.route("/job-listings", methods=["GET"])
 def job_listing():
   try:
     # Check if user is registered
@@ -341,6 +339,7 @@ def job_listing():
 
     if len(vacancy_query) > 0:
       return render_template("/job_listing.html", vacancy_query=vacancy_query)
+      #return json.dumps({'message': vacancy_query})
 
   except Exception as err:
     return json.dumps({'error': str(err)})
