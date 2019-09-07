@@ -1,43 +1,10 @@
 <!doctype html>
 <html>
     <head>
-            <link rel="stylesheet" type="text/css" href="../static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">	
+            <link rel="stylesheet" type="text/css" href="../../static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">	
+            <link rel="stylesheet" type="text/css" href="../../static/css/admin.css">	
             <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
         <title>Green Leaf Jobs | Admin</title>
-        <style>
-            body{margin:0px; font-family: arial;background: rgba(122, 240, 128, 0.123); color:#666;}
-            a{text-decoration: none; color:green;} a:hover{text-decoration: none;}
-            div{background: transparent;}
-            .aside{
-                width:200px;
-                position:fixed;
-                height: 100%;
-                background: #fff;
-                transition:width ease-in .5s;
-                overflow: hidden;
-            }
-            .main-side{margin-left:200px;transition:margin ease-in .5s;}
-            .displday{display: none;}
-            .bordered{border:1px solid grey;}
-            .header-bar{background: rgba(122, 240, 127, 0.301);color:green; 
-                height: 85px; overflow: hidden; padding:20px;
-                line-height:25px;
-            }
-            .summary-stats{height:140px; padding:20px; width:100%; box-sizing:border-box;}
-            .user-profile{width:150px; height:150px; margin:0px auto; border-radius:100%; border:5px solid #bfb; margin:20px; overflow: hidden;}
-            .user-profile img{width:inherit; height:inherit;}
-            .admin-menu{font-size: 14px;text-align: center; padding:20px 2px;}
-            .admin-menu a{border-bottom:1px solid #6f6; display: block;}
-            .admin-menu a:hover{background:rgba(78, 245, 56, 0.055);}
-            .admin-menu a:first-child{border-top:1px solid #6f6;}
-            .admin-menu a .active{border-left:5px solid rgb(78, 245, 56); background:rgba(78, 245, 56, 0.26); border-top:0px; border-bottom:0px;}
-            .admin-menu a span{display:block; padding:10px;}
-            th{text-transform: capitalize; background: #6c6; color:#cfc;}
-            .tab-bar{padding:20px 0px; font-weight:bold; color:green;}
-            table{width:100%; border-collapse: collapse;}
-            table td, table th{padding:10px; text-align: left;}
-            .logout{width:45%; min-width:300px; text-align: right; display:inline-block; float:right; clear:right;}
-        </style>
     </head>
     <body>
         <div class="main-container">
@@ -49,13 +16,14 @@
                     <img src="{{pix}}">
                 </div>
                 <div style="font-size: 12px;text-align: center;">
+                    <div><b>{{name}}</b></div>
                     <b>Logged-in at {{logintime}}</b>
                 </div>
                 <div class="admin-menu">
                     <a href='javascript:void()'><span class='active nav-list' name="users-nav">Users</span></a>
-                    <a href='javascript:void()'><span class='nav-list' name="vac-nav">Vacancies</span></a>
-                    <a href='javascript:void()'><span class='nav-list' name="app-nav">Applications</span></a>
-                    <a href='javascript:void()'><span class='nav-list'>Add Jobs</span></a>
+                    <a href='javascript:void()'><span class='nav-list' name="vac-nav">Job Vacancies</span></a>
+                    <a href='javascript:void()'><span class='nav-list' name="app-nav">Job Applications</span></a>
+                    <a href='javascript:void()'><span class='nav-list'>Add Job Vacancy</span></a>
                     <a href='javascript:void()'><span class='nav-list'>Setting</span></a>
                 </div>
             </div>
@@ -197,95 +165,4 @@
     </body>
 </html>
 
-<script>
-    // target html objects
-    let assideBox = document.getElementById("asideBox")
-    let mainBox =  document.getElementById("mainBox")
-    let nicon =  document.getElementById("navicon")
-
-    // set a toggle flag
-    let flag=0
-
-    //  perform show toggle
-    function showMenu(){
-        assideBox.style.width = "0px"
-        mainBox.style.marginLeft = "0px"
-        flag = 1
-    }
-    //  perform hide toggle
-    function hideMenu(){
-        assideBox.style.width = "200px"
-        mainBox.style.marginLeft = "200px"
-        flag = 0
-    }
-
-    // togglge based on current flag value
-    nicon.addEventListener("click", toggleMenu)
-    function toggleMenu(){
-        if(flag == 0){
-            showMenu()
-        }else{
-            hideMenu()
-        }
-            
-    }
-    
-    // perform toggle event when the screen goes beyound or less than 800
-    window.onresize = function(){
-        if(window.innerWidth < 800){
-            showMenu()
-        }else{
-            hideMenu()
-        }
-    }
-
-    /********************************************************/
-    let tbls = document.getElementsByClassName("display")
-    let navs =  document.getElementsByClassName("nav-list")
-    tblIndex = 0
-    navIndex = 0
-    /********************************************************/
-    
-    // hide all display table
-    function hideAllTables(){
-        for(i=0; i<tbls.length; i++){
-            tbls[i].style.display = "none"
-        }
-    } 
-    // deactivate any active menu-bar
-    function removeActiveMenu(){
-        for(i=0; i<navs.length; i++){
-            navs[i].classList.remove("active")
-        }
-    }
-    // display the first table as default
-    function displayTbl(x){
-        hideAllTables()
-        tbls[x].style.display = "block"
-    }
-    function setActiveNav(x){
-        removeActiveMenu()
-        navs[x].classList.add("active")
-    }
-
-    // set default view
-    displayTbl(tblIndex)
-    setActiveNav(navIndex)
-    
-    let contentLen = 0
-    contentLen = navs.length < tbls.length? navs.length:tbls.length;
-    
-    for(j=0; j<contentLen; j++){
-        navs[j].addEventListener("click", seCurrentNav);
-    }
-    function seCurrentNav(){
-        for(k=0; k<contentLen; k++){
-            if(navs[k].isEqualNode(this)){
-                displayTbl(k)
-                setActiveNav(k)
-            }
-        }
-        
-    }
-
-</script>
+<script src="../../static/js/green_leaf.js"></script>
