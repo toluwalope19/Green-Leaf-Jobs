@@ -37,7 +37,7 @@
                 <div class='summary-stats'><div class='summary-stats bordered' style="border-color:#6f6;"></div></div>
 
             <!--- users display table--->
-                <div id='users' class="display">                
+                <div id='users' class="fadeInDown animated  display">                
                 <div class='main-display-area'>
                     <div style="padding:20px;">
                         <div class="users-table">
@@ -76,7 +76,7 @@
             <!--- end of users display table--->
 
             <!--- vacancies display table--->
-            <div id="vacancies" class="display">
+            <div id="vacancies" class="display fadeInDown animated  ">
                 <div class='main-display-area'>
                     <div style="padding:20px;">
                         <div class="users-table">
@@ -99,11 +99,11 @@
                                 <tbody>
                                     {% for vacancy in vacancies %}
                                     <tr>
-                                        <td>{{vacancy["added_by"]}}</td>
+                                        <td>{{vacancy["first_name"]}} {{vacancy["last_name"]}}</td>
                                         <td>{{vacancy["position"]}}</td>
                                         <td>{{vacancy["salary"]}}</td>
                                         <td>{{vacancy["job_type"]}}</td>
-                                        <td>{{vacancy["job_func_id"]}}</td>
+                                        <td>{{vacancy["job_function"]}}</td>
                                         <td>{{vacancy["description"]}}</td>
                                         <td>{{vacancy["requirement"]}}</td>
                                         <td><center><a href="#"><i class="fa fa-trash"></i></a></center></td>
@@ -119,7 +119,7 @@
             <!--- end of vacancies display table--->
 
             <!--- applications display table--->
-            <div id="applications" class="display">                
+            <div id="applications" class="display fadeInDown animated  ">                
                 <div class='main-display-area'>
                     <div style="padding:20px;">
                         <div class="users-table">
