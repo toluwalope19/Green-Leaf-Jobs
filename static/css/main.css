@@ -216,6 +216,18 @@ iframe {
   color: #555;
   line-height: 1.2;
 }
+
+
+.category {
+  
+  background: transparent;
+  font-family:arial;
+  font-size: 15px;
+  color: #555;
+  line-height: 1.2;
+}
+
+
 .custom-select{
   background-color: transparent;
   margin-top:10px;
@@ -224,6 +236,7 @@ iframe {
   color:#aaa
   ;
 }
+
 
 /*---------------------------------------------*/
 input.input100 {
