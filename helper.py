@@ -19,3 +19,10 @@ def ind_function(db):
 def loctn_function(db):
   loctn_query = db.execute("SELECT * FROM locations")
   return loctn_query
+
+#fetch Vacancies
+def fetch_vancacies(db):
+    list_of_vacancies = db.execute("SELECT * FROM vacancies INNER JOIN users "+
+        "ON vacancies.user_id=users.id INNER JOIN job_functions ON vacancies.job_func_id=job_functions.id")
+    return list_of_vacancies
+

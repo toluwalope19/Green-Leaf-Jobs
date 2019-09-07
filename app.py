@@ -4,7 +4,7 @@ import datetime
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
-from helper import loggedIn_user_info, job_function, ind_function, loctn_function
+from helper import loggedIn_user_info, job_function, ind_function, loctn_function, fetch_vancacies
 from sql import SQL
 
 # Instantiate app
@@ -61,18 +61,26 @@ def login():
                 #Ensure username exists and password is correct
                 if len(rows) > 0:
                     if check_password_hash(rows[0]["password"], frm_password):
+
                         # Remember which user has logged in
                         session["user_id"] = rows[0]["id"]
+
+                        # applicant login logic
                         if rows[0]["user_type"] == "applicant":
                             l_time = now.strftime("%H:%M:%S")
                             return render_template("/login.html", msg="You are logged-in sucessfully "+rows[0]["user_type"], logintime=l_time)
+
+                        # employer login logic
                         elif rows[0]["user_type"] == "employer":
                             # get login time
-
                             l_time = now.strftime("%H:%M:%S")
 
+                            # Query database for list of job-function
+                            jobFunc_rows = db.execute("SELECT * FROM job_functions")
+
                             # get list of vacancies
-                            list_of_vacancies = db.execute("SELECT * FROM vacancies")
+                            list_of_vacancies = fetch_vancacies(db)
+
                             vac = []
                             if len(list_of_vacancies) > 0:
                               vac = list_of_vacancies
@@ -83,15 +91,19 @@ def login():
                               logintime=l_time,
                               vacancies=vac,
                               pix=rows[0]["photo"],
+
                               name=rows[0]["first_name"]+" "+rows[0]["last_name"],
+                              jf=jobFunc_rows
                             )
 
+                        # admin login logic
                         else:
                             # get list of users
                             list_of_users = db.execute("SELECT * FROM users")
                             # get list of vacancies
-                            list_of_vacancies = db.execute("SELECT * FROM vacancies")
+                            list_of_vacancies = fetch_vancacies(db)
                             # get list of applications
+
                             list_of_applications = db.execute("SELECT * FROM application")
 
                             usr =[]
@@ -228,28 +240,29 @@ def vacancies():
 
   else:
     try:
-      # user_id = session["user_id"]
-      user_id = request.form.get("user_id")
+      user_id = session["user_id"]
       position = request.form.get("position")
       salary = request.form.get("salary")
       job_type = request.form.get("job_type")
       job_func_id = request.form.get("job_func_id")
       description = request.form.get("description")
       requirement = request.form.get("requirement")
-
+      #return render_template("/employer/index.html", msg=position+" "+salary+" "+job_type+" "+job_func_id+" "+user_id)
       if not position or not salary or not job_type or not job_func_id or not user_id:
-        #flash("All fields are required")
-        return json.dumps({'message': 'All fields are required'})
+          return render_template("/employer/index.html", msg='All fields are required!')
       else:
-        reg_details = db.execute("INSERT INTO vacancies (user_id, position, salary, job_type, job_func_id, description, requirement) VALUES (:user_id, :position, :salary, :job_type, :job_func_id, :description, :requirement)",
-        user_id = user_id, position = position, salary = salary, job_type = job_type, job_func_id = job_func_id, description = description, requirement = requirement)
-
-        return json.dumps({'message': 'Job successfully uploaded!'})
-
+        if job_type != "---select---":
+          if job_func_id != "---select---":
+            db.execute("INSERT INTO vacancies (user_id, position, salary, job_type, job_func_id, description, requirement) VALUES (:user_id, :position, :salary, :job_type, :job_func_id, :description, :requirement)",
+            user_id = user_id, position = position, salary = salary, job_type = job_type, job_func_id = job_func_id, description = description, requirement = requirement)
+            return render_template("/employer/index.html", msg='Job Uploaded successfully!')
+          else:
+            return render_template("/employer/index.html", msg='User created successfully!')
+        else:
+          return render_template("/employer/index.html", msg='User created successfully!')
     except Exception as err:
-      return json.dumps({'error': str(err)})
 
-
+      return render_template("/employer/index.html", msg=str(err))
 
 # Job Application route
 @app.route("/application", methods=["POST"])
