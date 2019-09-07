@@ -1,3 +1,30 @@
+
+@import url("https://fonts.googleapis.com/css?family=Nunito:200,300,400,700");
+
+.navbar{
+    border-top-left-radius: 20px;
+    height: 70px;
+}
+
+
+.sidebar{
+    float: left;
+    margin-left: -197px;
+    padding-top:50px;
+    line-height: 80px;
+    font-size: 11px;
+    height:683px;
+    width: 200px;
+    background-color:rgba(16, 231, 145, 0.551);
+    border-bottom-left-radius: 20px;
+}
+.sidebar li{
+    list-style: none;
+}
+.sidebar li a{
+    color:rgba(128, 128, 128, 0.952);
+}
+=======
 body{margin:0px; font-family: arial;background: rgba(122, 240, 128, 0.123); color:#666;}
 a{text-decoration: none; color:green;} a:hover{text-decoration: none;}
 div{background: transparent;}
@@ -30,3 +57,4 @@ th{text-transform: capitalize; background: #6c6; color:#cfc;}
 table{width:100%; border-collapse: collapse;}
 table td, table th{padding:10px; text-align: left;}
 .logout{width:45%; min-width:300px; text-align: right; display:inline-block; float:right; clear:right;}
+
