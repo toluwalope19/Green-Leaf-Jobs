@@ -6,6 +6,7 @@ from werkzeug.exceptions import default_exceptions, HTTPException, InternalServe
 from werkzeug.security import check_password_hash, generate_password_hash
 from helper import loggedIn_user_info, job_function, ind_function, loctn_function, fetch_vancacies
 from sql import SQL
+import smtplib, ssl
 
 # Instantiate app
 app = Flask(__name__)
@@ -72,6 +73,7 @@ def login():
 
                         # employer login logic
                         elif rows[0]["user_type"] == "employer":
+
                             # get login time
                             l_time = now.strftime("%H:%M:%S")
 
@@ -79,6 +81,7 @@ def login():
                             jobFunc_rows = db.execute("SELECT * FROM job_functions")
 
                             # get list of vacancies
+
                             list_of_vacancies = fetch_vancacies(db)
 
                             vac = []
@@ -100,6 +103,7 @@ def login():
                         else:
                             # get list of users
                             list_of_users = db.execute("SELECT * FROM users")
+
                             # get list of vacancies
                             list_of_vacancies = fetch_vancacies(db)
                             # get list of applications
@@ -247,6 +251,7 @@ def vacancies():
       job_func_id = request.form.get("job_func_id")
       description = request.form.get("description")
       requirement = request.form.get("requirement")
+
       #return render_template("/employer/index.html", msg=position+" "+salary+" "+job_type+" "+job_func_id+" "+user_id)
       if not position or not salary or not job_type or not job_func_id or not user_id:
           return render_template("/employer/index.html", msg='All fields are required!')
@@ -356,3 +361,28 @@ def job_listing():
 
   except Exception as err:
     return json.dumps({'error': str(err)})
+
+# contact route
+@app.route("/contact", methods=["GET","POST"])
+def contact():
+    if request.method == "GET":
+      return render_template("/contact.html")
+    else:
+      try:
+        first_name = request.form.get("fname")
+        last_name = request.form.get("lname")
+        email = request.form.get("email")
+        subject = request.form.get("subject")
+        message = request.form.get("message")
+
+        if not first_name or not last_name or not email or not subject or not message:
+          return json.dumps({'message': 'All fields are required'})
+        else:
+         server = smtplib.SMTP("smtp.gmail.com",587)
+         server.starttls()
+         server.login("ayodeletolulope18@gmail.com", "Iamagoodboy95")
+         server.sendmail("ayodeletolulope18@gmail.com", email, message)
+         return render_template("/contact.html", msg="Message sent")
+
+      except Exception as err:
+        return render_template("/contact.html", msg=str(err))
