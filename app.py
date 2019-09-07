@@ -55,7 +55,8 @@ def login():
         if frm_email:
             if frm_password:
                 # Query database for username
-                rows = db.execute("SELECT id, email, password, user_type, photo FROM users WHERE email = :mail", mail=frm_email)
+
+                rows = db.execute("SELECT first_name, last_name, id, email, password, user_type, photo FROM users WHERE email = :mail", mail=frm_email)
 
                 #Ensure username exists and password is correct
                 if len(rows) > 0:
@@ -66,15 +67,31 @@ def login():
                             l_time = now.strftime("%H:%M:%S")
                             return render_template("/login.html", msg="You are logged-in sucessfully "+rows[0]["user_type"], logintime=l_time)
                         elif rows[0]["user_type"] == "employer":
-                            # get login time                   
-                            l_time = now.strftime("%H:%M:%S")        
-                            return render_template("/login.html", msg="You are logged-in sucessfully "+rows[0]["user_type"], logintime=l_time)
-                        else:        
-                            # get list of users      
-                            list_of_users = db.execute("SELECT * FROM users")
-                            # get list of vacancies      
+                            # get login time
+
+                            l_time = now.strftime("%H:%M:%S")
+
+                            # get list of vacancies
                             list_of_vacancies = db.execute("SELECT * FROM vacancies")
-                            # get list of applications      
+                            vac = []
+                            if len(list_of_vacancies) > 0:
+                              vac = list_of_vacancies
+
+                            return render_template(
+                              "/employer/index.html",
+                              usertype=rows[0]["user_type"],
+                              logintime=l_time,
+                              vacancies=vac,
+                              pix=rows[0]["photo"],
+                              name=rows[0]["first_name"]+" "+rows[0]["last_name"],
+                            )
+
+                        else:
+                            # get list of users
+                            list_of_users = db.execute("SELECT * FROM users")
+                            # get list of vacancies
+                            list_of_vacancies = db.execute("SELECT * FROM vacancies")
+                            # get list of applications
                             list_of_applications = db.execute("SELECT * FROM application")
 
                             usr =[]
@@ -86,21 +103,24 @@ def login():
 
                             if len(list_of_vacancies) > 0:
                               vac = list_of_vacancies
-                              
+
                             if len(list_of_applications) > 0:
                               applitn = list_of_applications
 
-                            # get login time                    
+                            # get login time
                             l_time = now.strftime("%H:%M:%S")
 
                             return render_template(
-                              "/admin/index.html", 
-                              usertype=rows[0]["user_type"], 
-                              logintime=l_time, 
-                              users=usr, 
+                              "/admin/index.html",
+                              usertype=rows[0]["user_type"],
+                              logintime=l_time,
+                              users=usr,
                               vacancies=vac,
-                              applicantions=applitn, 
-                              pix=rows[0]["photo"]
+                              applicantions=applitn,
+
+                              pix=rows[0]["photo"],
+                              name=rows[0]["first_name"]+" "+rows[0]["last_name"],
+
                             )
                     else:
                         return render_template("/login.html", msg="Invalid password")
@@ -133,7 +153,7 @@ def register():
       user_type = request.form.get("user_type")
       photo = "../static/images/person_1.jpg"
       reg_date = now.strftime("%Y-%m-%d")
-      
+
       # Validate form data
       if not first_name:
         return render_template("/register.html", msg='Please supply your First Name')
@@ -201,8 +221,8 @@ def vacancies():
     list_of_vacancies = db.execute("SELECT * FROM vacancies")
     if len(list_of_vacancies) > 0:
       vacancies = list_of_vacancies
-                              
-    # get login time                    
+
+    # get login time
     l_time = now.strftime("%H:%M:%S")
     return render_template("/admin/index.html", msg=rows[0]["user_type"], logintime=l_time, vacancies=vacancies, _err=_err, pix=rows[0]["photo"])
 
@@ -228,7 +248,7 @@ def vacancies():
 
     except Exception as err:
       return json.dumps({'error': str(err)})
-  
+
 
 
 # Job Application route
@@ -298,3 +318,17 @@ def comment():
 
   except Exception as err:
     return json.dumps({'error': str(err)})
+
+
+
+# About route
+@app.route("/about", methods=["GET"])
+def about():
+  return render_template("/about.html")
+
+
+# employer route
+@app.route("/employer", methods=["GET", "POST"])
+def employer():
+  return render_template("/employer/index.html")
+
