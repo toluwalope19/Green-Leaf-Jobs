@@ -153,6 +153,8 @@ iframe {
   background: rgba(108, 196, 113, 0.137);
 }
 
+.messagebox{font-size:13px;}
+
 .wrap-login100 {
   width: 500px;
   overflow: hidden;
@@ -198,6 +200,15 @@ iframe {
 .input100 {
   display: block;
   width: 100%;
+  background: transparent;
+  font-family:arial;
+  font-size: 15px;
+  color: #555;
+  line-height: 1.2;
+}
+
+.category {
+  
   background: transparent;
   font-family:arial;
   font-size: 15px;
