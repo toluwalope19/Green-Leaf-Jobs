@@ -332,3 +332,15 @@ def about():
 def employer():
   return render_template("/employer/index.html")
 
+# Job Listing route
+@app.route("/job-listings", methods=["GET", "POST"])
+def job_listing():
+  try:
+    # Check if user is registered
+    vacancy_query = db.execute("SELECT * FROM vacancies")
+
+    if len(vacancy_query) > 0:
+      return render_template("/job_listing.html", vacancy_query=vacancy_query)
+
+  except Exception as err:
+    return json.dumps({'error': str(err)})
