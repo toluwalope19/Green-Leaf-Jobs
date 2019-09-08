@@ -4,7 +4,7 @@ import datetime
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
-from helper import loggedIn_user_info, fetch_vancacies
+from helper import loggedIn_user_info, job_function, ind_function, loctn_function, fetch_vancacies, fetch_jobs
 from sql import SQL
 import smtplib, ssl
 
@@ -39,7 +39,11 @@ now = datetime.datetime.now()
 # root route
 @app.route("/")
 def index():
-    return render_template('index.html')
+    jobs = job_function(db)
+    industries = ind_function(db)
+    locations = loctn_function(db)
+    job_listing = fetch_jobs(db)
+    return render_template('index.html', jobs=jobs, industries=industries, locations=locations, job_listing=job_listing)
 
 # login route
 @app.route("/login", methods=["GET", "POST"])
@@ -53,12 +57,13 @@ def login():
         if frm_email:
             if frm_password:
                 # Query database for username
+
                 rows = db.execute("SELECT first_name, last_name, id, email, password, user_type, photo FROM users WHERE email = :mail", mail=frm_email)
 
                 #Ensure username exists and password is correct
                 if len(rows) > 0:
                     if check_password_hash(rows[0]["password"], frm_password):
-                        
+
                         # Remember which user has logged in
                         session["user_id"] = rows[0]["id"]
 
@@ -66,39 +71,44 @@ def login():
                         if rows[0]["user_type"] == "applicant":
                             l_time = now.strftime("%H:%M:%S")
                             return render_template("/login.html", msg="You are logged-in sucessfully "+rows[0]["user_type"], logintime=l_time)
-                        
+
                         # employer login logic
                         elif rows[0]["user_type"] == "employer":
-                            # get login time                   
-                            l_time = now.strftime("%H:%M:%S")    
+
+                            # get login time
+                            l_time = now.strftime("%H:%M:%S")
 
                             # Query database for list of job-function
                             jobFunc_rows = db.execute("SELECT * FROM job_functions")
 
-                            # get list of vacancies      
+                            # get list of vacancies
+
                             list_of_vacancies = fetch_vancacies(db)
+
                             vac = []
                             if len(list_of_vacancies) > 0:
                               vac = list_of_vacancies
 
                             return render_template(
-                              "/employer/index.html", 
-                              usertype=rows[0]["user_type"], 
-                              logintime=l_time, 
+                              "/employer/index.html",
+                              usertype=rows[0]["user_type"],
+                              logintime=l_time,
                               vacancies=vac,
                               pix=rows[0]["photo"],
-                              name=rows[0]["first_name"]+" "+rows[0]["last_name"], 
+
+                              name=rows[0]["first_name"]+" "+rows[0]["last_name"],
                               jf=jobFunc_rows
                             )
-                            
-                        # admin login logic
-                        else:        
-                            # get list of users      
-                            list_of_users = db.execute("SELECT * FROM users")
-                            # get list of vacancies      
 
+                        # admin login logic
+                        else:
+                            # get list of users
+                            list_of_users = db.execute("SELECT * FROM users")
+
+                            # get list of vacancies
                             list_of_vacancies = fetch_vancacies(db)
-                            # get list of applications      
+                            # get list of applications
+
                             list_of_applications = db.execute("SELECT * FROM application")
 
                             usr =[]
@@ -110,22 +120,24 @@ def login():
 
                             if len(list_of_vacancies) > 0:
                               vac = list_of_vacancies
-                              
+
                             if len(list_of_applications) > 0:
                               applitn = list_of_applications
 
-                            # get login time                    
+                            # get login time
                             l_time = now.strftime("%H:%M:%S")
 
                             return render_template(
-                              "/admin/index.html", 
-                              usertype=rows[0]["user_type"], 
-                              logintime=l_time, 
-                              users=usr, 
+                              "/admin/index.html",
+                              usertype=rows[0]["user_type"],
+                              logintime=l_time,
+                              users=usr,
                               vacancies=vac,
-                              applicantions=applitn, 
+                              applicantions=applitn,
+
                               pix=rows[0]["photo"],
-                              name=rows[0]["first_name"]+" "+rows[0]["last_name"], 
+                              name=rows[0]["first_name"]+" "+rows[0]["last_name"],
+
                             )
                     else:
                         return render_template("/login.html", msg="Invalid password")
@@ -158,7 +170,7 @@ def register():
       user_type = request.form.get("user_type")
       photo = "../static/images/person_1.jpg"
       reg_date = now.strftime("%Y-%m-%d")
-      
+
       # Validate form data
       if not first_name:
         return render_template("/register.html", msg='Please supply your First Name')
@@ -226,8 +238,8 @@ def vacancies():
     list_of_vacancies = db.execute("SELECT * FROM vacancies")
     if len(list_of_vacancies) > 0:
       vacancies = list_of_vacancies
-                              
-    # get login time                    
+
+    # get login time
     l_time = now.strftime("%H:%M:%S")
     return render_template("/admin/index.html", msg=rows[0]["user_type"], logintime=l_time, vacancies=vacancies, _err=_err, pix=rows[0]["photo"])
 
@@ -246,7 +258,7 @@ def vacancies():
           return render_template("/employer/index.html", msg='All fields are required!')
       else:
         if job_type != "---select---":
-          if job_func_id != "---select---":  
+          if job_func_id != "---select---":
             db.execute("INSERT INTO vacancies (user_id, position, salary, job_type, job_func_id, description, requirement) VALUES (:user_id, :position, :salary, :job_type, :job_func_id, :description, :requirement)",
             user_id = user_id, position = position, salary = salary, job_type = job_type, job_func_id = job_func_id, description = description, requirement = requirement)
             return render_template("/employer/index.html", msg='Job Uploaded successfully!')
@@ -255,9 +267,8 @@ def vacancies():
         else:
           return render_template("/employer/index.html", msg='User created successfully!')
     except Exception as err:
-      return render_template("/employer/index.html", msg=str(err))
-  
 
+      return render_template("/employer/index.html", msg=str(err))
 
 # Job Application route
 @app.route("/application", methods=["POST"])
@@ -327,8 +338,6 @@ def comment():
   except Exception as err:
     return json.dumps({'error': str(err)})
 
-
-
 # About route
 @app.route("/about", methods=["GET"])
 def about():
@@ -339,6 +348,20 @@ def about():
 @app.route("/employer", methods=["GET", "POST"])
 def employer():
   return render_template("/employer/index.html")
+
+# Job Listing route
+@app.route("/job-listings", methods=["GET"])
+def job_listing():
+  try:
+    # Check if user is registered
+    vacancy_query = db.execute("SELECT * FROM vacancies")
+
+    if len(vacancy_query) > 0:
+      return render_template("/job_listing.html", vacancy_query=vacancy_query)
+      #return json.dumps({'message': vacancy_query})
+
+  except Exception as err:
+    return json.dumps({'error': str(err)})
 
 # contact route
 @app.route("/contact", methods=["GET","POST"])
@@ -361,14 +384,6 @@ def contact():
          server.login("ayodeletolulope18@gmail.com", "Iamagoodboy95")
          server.sendmail("ayodeletolulope18@gmail.com", email, message)
          return render_template("/contact.html", msg="Message sent")
-      
+
       except Exception as err:
         return render_template("/contact.html", msg=str(err))
-      
-      
-#   # job_listing route
-# @app.route("/job_listing", methods=["GET","POST"])
-# def job_listing():
-      
-              
-  
