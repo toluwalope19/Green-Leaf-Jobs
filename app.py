@@ -4,7 +4,7 @@ import datetime
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
-from helper import loggedIn_user_info, fetch_vancacies
+from helper import loggedIn_user_info, job_function, ind_function, loctn_function, fetch_vancacies, fetch_jobs
 from sql import SQL
 import smtplib, ssl
 
@@ -39,7 +39,11 @@ now = datetime.datetime.now()
 # root route
 @app.route("/")
 def index():
-    return render_template('index.html')
+    jobs = job_function(db)
+    industries = ind_function(db)
+    locations = loctn_function(db)
+    job_listing = fetch_jobs(db)
+    return render_template('index.html', jobs=jobs, industries=industries, locations=locations, job_listing=job_listing)
 
 # login route
 @app.route("/login", methods=["GET", "POST"])
@@ -334,8 +338,6 @@ def comment():
   except Exception as err:
     return json.dumps({'error': str(err)})
 
-
-
 # About route
 @app.route("/about", methods=["GET"])
 def about():
@@ -346,6 +348,20 @@ def about():
 @app.route("/employer", methods=["GET", "POST"])
 def employer():
   return render_template("/employer/index.html")
+
+# Job Listing route
+@app.route("/job-listings", methods=["GET"])
+def job_listing():
+  try:
+    # Check if user is registered
+    vacancy_query = db.execute("SELECT * FROM vacancies")
+
+    if len(vacancy_query) > 0:
+      return render_template("/job_listing.html", vacancy_query=vacancy_query)
+      #return json.dumps({'message': vacancy_query})
+
+  except Exception as err:
+    return json.dumps({'error': str(err)})
 
 # contact route
 @app.route("/contact", methods=["GET","POST"])
@@ -371,5 +387,3 @@ def contact():
 
       except Exception as err:
         return render_template("/contact.html", msg=str(err))
-
-
