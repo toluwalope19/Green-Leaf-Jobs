@@ -110,10 +110,10 @@
                         <h1 class="text-white font-weight-bold">Green Leaf Jobs </h1>
                         <p>Find your dream jobs.</p>
                     </div>
-                    <form method="post" class="search-jobs-form  fadeInDown animated delay1">
+                    <form method="post" class="search-jobs-form  fadeInDown animated delay1" action="/job-search">
                         <div class="row mb-5">
                             <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                                <select class="form-control">
+                                <select class="form-control" name="job_selected">
                                 <option selected disabled>All Job function</option>
                                   {% for job in jobs%}
                                   <option value="{{job['id']}}">{{job["job_function"]}}</option>
@@ -121,7 +121,7 @@
                                 </select>
                             </div>
                             <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                                <select class="form-control">
+                                <select class="form-control" name="ind_selected">
                                 <option selected disabled>All Industries</option>
                                   {% for industry in industries%}
                                     <option value="{{industry['id']}}">{{industry["industry_name"]}}</option>
@@ -129,7 +129,7 @@
                                 </select>
                             </div>
                             <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                                <select class="form-control">
+                                <select class="form-control" name="loctn_selected">
                                 <option selected disabled>All Location</option>
                                   {% for location in locations%}
                                     <option value="{{location['id']}}">{{location["locations"]}}</option>
@@ -137,7 +137,7 @@
                                 </select>
                             </div>
                             <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                                <button type="submit" class="btn btn-success btn-lg btn-block text-white btn-search"><span class="icon-search icon mr-2"></span>Search Job</button>
+                              <button type="submit" class="btn btn-success btn-lg btn-block text-white btn-search"><span class="icon-search icon mr-2"></span>Search Job</button>
                             </div>
                         </div>
                     </form>

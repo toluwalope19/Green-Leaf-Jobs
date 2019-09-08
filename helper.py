@@ -36,3 +36,9 @@ def fetch_jobs(db):
     else:
       return ""
 
+
+#fetch jobs
+def fetch_search(db, job_id, ind_id, loc_id):
+    srch_rslt = db.execute("SELECT * FROM vacancies INNER JOIN job_functions ON vacancies.job_func_id = job_functions.id"+
+                           " WHERE job_func_id=:jID", jID=job_id)
+    return srch_rslt
