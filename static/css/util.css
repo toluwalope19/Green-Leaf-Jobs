@@ -1015,11 +1015,12 @@
 .p-r-54 {padding-right: 54px;}
 .p-r-55 {
 	padding-right: 55px;
-	width:60%;
+	width:60%; min-width:300px;
 }
 .p-w-55 {
 		padding-right: 55px;
 		width:90%; margin:0px auto;
+		min-width:300px;
 }
 .p-r-56 {padding-right: 56px;}
 .p-r-57 {padding-right: 57px;}

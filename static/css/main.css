@@ -25,6 +25,7 @@ body, html {
 	height: 100%;
 	font-family: OpenSans-Regular, sans-serif;
   font-family: arial;
+  min-width:300px;
 }
 
 .text-center a{color:#076426c2}
