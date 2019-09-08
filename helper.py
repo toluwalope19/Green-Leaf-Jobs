@@ -26,3 +26,13 @@ def fetch_vancacies(db):
         "ON vacancies.user_id=users.id INNER JOIN job_functions ON vacancies.job_func_id=job_functions.id")
     return list_of_vacancies
 
+
+#fetch jobs
+def fetch_jobs(db):
+    job_listing = db.execute("SELECT * FROM users INNER JOIN company "+
+        "ON users.id=company.user_id INNER JOIN vacancies ON vacancies.user_id=company.id ORDER BY id DESC LIMIT 0, 3")
+    if len(job_listing) > 0:
+      return job_listing
+    else:
+      return ""
+

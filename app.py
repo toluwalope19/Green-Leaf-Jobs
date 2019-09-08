@@ -4,7 +4,7 @@ import datetime
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
-from helper import loggedIn_user_info, job_function, ind_function, loctn_function, fetch_vancacies
+from helper import loggedIn_user_info, job_function, ind_function, loctn_function, fetch_vancacies, fetch_jobs
 from sql import SQL
 import smtplib, ssl
 
@@ -42,7 +42,8 @@ def index():
     jobs = job_function(db)
     industries = ind_function(db)
     locations = loctn_function(db)
-    return render_template('index.html', jobs=jobs, industries=industries, locations=locations)
+    job_listing = fetch_jobs(db)
+    return render_template('index.html', jobs=jobs, industries=industries, locations=locations, job_listing=job_listing)
 
 # login route
 @app.route("/login", methods=["GET", "POST"])
