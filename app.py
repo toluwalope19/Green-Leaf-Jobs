@@ -367,8 +367,8 @@ def contact():
         else:
          server = smtplib.SMTP("smtp.gmail.com",587)
          server.starttls()
-         server.login("ayodeletolulope18@gmail.com", "Iamagoodboy95")
-         server.sendmail("ayodeletolulope18@gmail.com", email, message)
+         server.login("decagreenleafjobs19@gmail.com", "decagon19")
+         server.sendmail("decagreenleafjobs19@gmail.com", email, message)
          return render_template("/contact.html", msg="Message sent")
 
       except Exception as err:
