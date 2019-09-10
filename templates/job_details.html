@@ -73,7 +73,6 @@
         </div>
       </div>
     </section>
-    
     <section class="site-section" id="next-section" style="background-color: #eee;">
       <div class="container">
         <div class="row">
@@ -103,12 +102,15 @@
 
         <div class="col-lg-5 mb-5 mb-lg-0">
           <h1>{{position}}</h1>
-        <form action="#" class="">
-
+        <form action="/application" class="" method="post">
+            
+    {{msg}}
+    
           <div class="row form-group">
             <div class="col-md-12 mb-3 mb-md-0">
               <label class="text-black" for="fname">Full Name</label>
-              <input type="text" id="fname" class="form-control" style="width:100%;">
+              <input type="text" id="fname" class="form-control" style="width:100%;" name="fname">
+              <input type="hidden" class="form-control" style="width:100%;" name="job_id" value="{{job_details[0]['id']}}">
             </div>
           </div>
 
@@ -117,7 +119,7 @@
             <div class="col-md-12">
                 <div class="col-auto my-1 wrap=input100 " style="margin-left:-17px;">
                     <label class="mr-sm-2" for="inlineFormCustomSelect">Qualification</label>
-                        <select class="custom-select  category" id="inlineFormCustomSelect" style='width:107%;'>
+                        <select class="custom-select category" name="qual"  id="inlineFormCustomSelect" style='width:107%;'>
                               <option class="input100 " selected>Qualification</option>
                               <option value="applicant">WASSCE</option>
                               <option value="employer">Bachelors</option>
@@ -131,7 +133,7 @@
           <div class="row form-group">
             <div class="col-md-12">
               <label class="text-black" for="message"><h5>Experience/Cover letter</h5></label>
-              <textarea name="message" id="message" cols="30" rows="7" class="form-control"
+              <textarea name="experience" id="message" cols="30" rows="7" class="form-control"
                 placeholder="Write your notes or questions here..."></textarea>
             </div>
           </div>

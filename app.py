@@ -275,19 +275,21 @@ def application():
   """User apply for job"""
   try:
     # user_id = session["user_id"]
-    user_id = request.form.get("user_id")
-    vacancy_id = request.form.get("vacancy_id")
+    name = request.form.get("fname")
+    qual = request.form.get("qual")
     experience = request.form.get("experience")
-    qualification = request.form.get("qualification")
     date_time = now.strftime("%Y-%m-%d")
+    job_id = request.form.get("job_id")
 
-    if not experience or not qualification:
-      return json.dumps({'message': 'All fields are required'})
+    #return json.dumps({'message': name+" "+qual+" "+experience+" "+date_time+" "+job_id}) 
+
+    if not experience or not qual or not name:
+       return json.dumps({'message': 'All fields are required'})
     else:
-      db.execute("INSERT INTO application (user_id, vacancy_id, experience, qualification, date_time) VALUES (:user_id, :vacancy_id, :experience, :qualification, :date_time)",
-      user_id = user_id, vacancy_id = vacancy_id, experience = experience, qualification = qualification, date_time = date_time)
+       db.execute("INSERT INTO application (vacancy_id, experience, qualification, date_time, applicant) VALUES (:vacancy_id, :experience, :qualification, :date_time, :applicant)",
+       vacancy_id = job_id, experience = experience, qualification = qual, date_time = date_time, applicant=name)
 
-      return json.dumps({'message': 'Job Application successfully!'})
+    return render_template("/job_details.html", msg="Application completed successfully!", job_details=job_id)
 
   except Exception as err:
     return json.dumps({'error': str(err)})
@@ -356,8 +358,6 @@ def job_listing():
 @app.route("/job_details")
 def job_details():
     job_id = request.args.get("jobID") 
-    #job_details = db.execute("SELECT * FROM vacancies WHERE vacancies.id=:jID", jID=job_id)
-    #comp_details = db.execute("SELECT * FROM company WHERE ")
     job_details = db.execute("SELECT * FROM users INNER JOIN company ON users.id=company.user_id INNER JOIN vacancies ON vacancies.user_id=company.id WHERE vacancies.id=:jID", jID=job_id)
     return render_template('/job_details.html', job_details=job_details)
     
