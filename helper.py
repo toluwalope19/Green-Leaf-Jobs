@@ -1,9 +1,21 @@
 import os
 from flask import redirect, render_template, request, session
 
-def loggedIn_user_info(db):
-    rows = db.execute("SELECT id, email, password, user_type, photo FROM users WHERE id = :id", id=session["user_id"])
-    return rows
+def redirect_on_vacancy_add(db, msg, row):  
+    #User add vacancies
+    list_of_vacancies = db.execute("SELECT * FROM vacancies WHERE user_id=:user", user=row[0]["id"])
+    jobFunc_rows = db.execute("SELECT * FROM job_functions")
+    # redirect
+    return render_template(
+      "/employer/index.html", 
+        msg = msg,
+        vacancies=list_of_vacancies, 
+        usertype = row[0]["user_type"],
+        logintime = session["l_time"],
+        pix = row[0]["photo"],
+        name = row[0]["first_name"]+" "+row[0]["last_name"],
+        jf=jobFunc_rows
+    )
 
 # Get Job Functions from db
 def job_function(db):
@@ -42,3 +54,8 @@ def fetch_search(db, job_id, ind_id, loc_id):
     srch_rslt = db.execute("SELECT * FROM vacancies INNER JOIN job_functions ON vacancies.job_func_id = job_functions.id"+
                            " WHERE job_func_id=:jID", jID=job_id)
     return srch_rslt
+
+
+def perform_delete(db, table, id):
+  db.execute("DELETE FROM "+table+" WHERE id = :item", item=id)
+  

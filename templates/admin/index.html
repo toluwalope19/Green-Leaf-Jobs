@@ -23,7 +23,6 @@
                     <a href='javascript:void()'><span class='active nav-list' name="users-nav">Users</span></a>
                     <a href='javascript:void()'><span class='nav-list' name="vac-nav">Job Vacancies</span></a>
                     <a href='javascript:void()'><span class='nav-list' name="app-nav">Job Applications</span></a>
-                    <a href='javascript:void()'><span class='nav-list'>Add Job Vacancy</span></a>
                     <a href='javascript:void()'><span class='nav-list'>Setting</span></a>
                 </div>
             </div>
@@ -138,7 +137,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for appt in applitn %}
+                                    {% for appt in applicantions %}
                                     <tr>
                                         <td>{{appt["added_by"]}}</td>
                                         <td>{{appt["vacancy_id"]}}</td>
