@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-  <title>Careers &mdash; Website Template by Colorlib</title>
+  <title>Green Leaf Jobs | Listing</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" href="/static/css/custom-bs.css">
@@ -66,7 +66,7 @@
           <div class="col-md-12">
             <div class="mb-5 text-center">
               <h1 class="text-white font-weight-bold">Recent Job Listings</h1>
-              <p>Find your dream jobs in our powerful career website template.</p>
+              <p>Find your dream jobs</p>
             </div>
           </div>
         </div>
@@ -107,7 +107,7 @@
               <div class="col-md-3 text-md-right">
                 Salary<br/>
                 <strong class="text-black">&#8358;{{job['salary']}}</strong>
-                <p class="meta"><strong><a href="job_search.html" class="btn btn-success mt-3 px-2 py-1 mb-3">Apply</a></strong></p>
+                <p class="meta"><strong><a href="/job_details?jobID={{job['id']}}" class="btn btn-success mt-3 px-2 py-1 mb-3">Apply</a></strong></p>
               </div>
             </div>
             {% endfor %}
