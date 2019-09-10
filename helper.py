@@ -56,6 +56,35 @@ def fetch_search(db, job_id, ind_id, loc_id):
     return srch_rslt
 
 
-def perform_delete(db, table, id):
+def perform_delete(db, table, id, loc, row):
   db.execute("DELETE FROM "+table+" WHERE id = :item", item=id)
-  
+  vac = db.execute("SELECT * FROM vacancies WHERE user_id=:user", user=row[0]["id"])
+  jobFunc_rows = db.execute("SELECT * FROM job_functions")
+  applitn = db.execute("SELECT * FROM application")
+  msg = "Deleted!"
+ 
+
+  if loc == "ad":
+    return render_template(
+      "/admin/index.html",
+      usertype = session["user"][0]["user_type"],
+      logintime = session["l_time"],
+      pix = session["user"][0]["photo"],
+      name = session["user"][0]["first_name"]+" "+session["user"][0]["last_name"],
+      vacancies=vac,
+      applicantions=applitn,
+      users=db.execute("SELECT * FROM users")
+    )
+  elif loc == "emp":
+    return render_template(
+      "/employer/index.html", 
+        msg = msg,
+        vacancies=vac, 
+        usertype = row[0]["user_type"],
+        logintime = session["l_time"],
+        pix = row[0]["photo"],
+        name = row[0]["first_name"]+" "+row[0]["last_name"],
+        jf=jobFunc_rows
+    )
+  else:
+    sd

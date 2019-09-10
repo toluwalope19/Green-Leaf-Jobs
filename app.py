@@ -213,10 +213,10 @@ def register():
     except Exception as err:
       return render_template("/register.html", msg=str(err))
 
-# Admin - Delete User
-@app.route("/delete", methods=["GET", "POST"])
+# Admin - Delete
+@app.route("/delete", methods=["GET"])
 def delete():
-  """Admin delete user"""
+  #Admin delete user
   try:
     id = session["user_id"]
     if id and request.method == 'GET':
@@ -346,6 +346,21 @@ def contact():
         return render_template("/contact.html", msg=str(err))
 
 
+# contact route
+@app.route("/job_listing", methods=["GET"])
+def job_listing():
+    locations = loctn_function(db)
+    job_listing = fetch_jobs(db)
+    return render_template('job_listing.html',locations=locations, job_listing=job_listing, numlist=len(job_listing))
+
+@app.route("/job_details")
+def job_details():
+    job_id = request.args.get("jobID") 
+    #job_details = db.execute("SELECT * FROM vacancies WHERE vacancies.id=:jID", jID=job_id)
+    #comp_details = db.execute("SELECT * FROM company WHERE ")
+    job_details = db.execute("SELECT * FROM users INNER JOIN company ON users.id=company.user_id INNER JOIN vacancies ON vacancies.user_id=company.id WHERE vacancies.id=:jID", jID=job_id)
+    return render_template('/job_details.html', job_details=job_details)
+    
 # Add Company route
 # @app.route("/company", methods=["POST"])
 # def company():
