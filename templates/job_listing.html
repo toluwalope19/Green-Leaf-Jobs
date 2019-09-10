@@ -39,8 +39,9 @@
           <nav class="mx-auto site-navigation">
             <ul class="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
               <li><a href="/about">About</a></li>
-              <li><a href="/job-listings">Job Listings</a></li>
+              <li><a href="/job_listing">Job Listings</a></li>
               <li><a href="/contact">Contact Us</a></li>
+
               <li class="d-lg-none"><a href="/login">Login</a></li>
             </ul>
           </nav>
@@ -57,7 +58,7 @@
     </header>
 
     <!-- HOME -->
-    <section class="home-section section-hero inner-page overlay bg-image" style="background-image:linear-gradient(to top,rgba(0, 0, 0, 0.7),rgba(1, 107, 9, 0.5)), url('../static/images/hero_1.jpg'); padding-top: 8%;" id="home-section ";
+    <section class="home-section section-hero inner-page overlay bg-image" style="background-image:linear-gradient(to top,rgba(0, 0, 0, 0.7),rgba(1, 107, 9, 0.5)), url('../static/images/decagon.jpg'); padding-top: 8%;" id="home-section ";
       id="home-section">
 
       <div class="container">
@@ -79,32 +80,37 @@
 
 
 
-    <section class="site-section">
+    <section class="site-section" style="background: #eee;">
       <div class="container">
 
         <div class="row mb-5 justify-content-center">
           <div class="col-md-7 text-center">
-            <h2 class="section-title mb-2">0 Job Listed</h2>
+            <h2 class="section-title mb-2">{{numlist}} Job(s) Listed</h2>
           </div>
         </div>
 
-        <div class="mb-5">
-            <div class="row align-items-start job-item border-bottom pb-3 mb-3 pt-3">
+        <div class="mb-0">
+          {% for job in job_listing %}
+            <div   style="background:#fff;" class="row align-items-start job-item pb-6 mb-3 pt-5" id="border-bottom">
               <div class="col-md-2">
-                <a href="job-single.html"><img src="images/featured-listing-1.jpg" alt="Image" class="img-fluid"></a>
+                <a href="job-single.html"><img src="{{job['logo']}}" alt="Image" class="img-fluid"></a>
               </div>
               <div class="col-md-4">
-                <span class="badge badge-primary px-2 py-1 mb-3">{{job_type}}</span>
-                <h2><a href="job-single.html">{{position}}</a> </h2>
-                <p class="meta">Publisher: <strong>{{company_name}}</strong> In: <strong>{{job_function}}</strong></p>
+                <span class="badge badge-success px-2 py-1 mb-3">{{job["job_type"]}}</span>
+                <h2><a href="job-single.html">{{job['position']}}</a> </h2>
+                <p class="meta">Publisher: <strong>{{job['company_name']}}</strong></p>
               </div>
               <div class="col-md-3 text-left">
-                <h3>{{locations}}</h3>
+                <br>Location</br>
+                <p class="meta"><strong>{{job['address']}}</strong></p>
               </div>
               <div class="col-md-3 text-md-right">
-                <strong class="text-black">{{salary}}</strong>
+                Salary<br/>
+                <strong class="text-black">&#8358;{{job['salary']}}</strong>
+                <p class="meta"><strong><a href="job_search.html" class="btn btn-success mt-3 px-2 py-1 mb-3">Apply</a></strong></p>
               </div>
             </div>
+            {% endfor %}
           </div>
 
 
@@ -129,51 +135,7 @@
 
       </div>
     </section>
-
-    <section class="site-section py-4 mb-5 border-top">
-      <div class="container">
-
-        <div class="row align-items-center">
-          <div class="col-12 text-center mt-4 mb-5">
-            <div class="row justify-content-center">
-              <div class="col-md-7">
-                <h2 class="section-title mb-2">Our Top Recruiters</h2>
-                <p class="lead">Use our services and stand a chance of getting employed by blue chip companies</p>
-              </div>
-            </div>
-
-          </div>
-          <div class="col-6 col-lg-3 col-md-6 text-center">
-            <img src="/static/images/logo_mailchimp.svg" alt="Image" class="img-fluid logo-1">
-          </div>
-          <div class="col-6 col-lg-3 col-md-6 text-center">
-            <img src="/static/images/logo_paypal.svg" alt="Image" class="img-fluid logo-2">
-          </div>
-          <div class="col-6 col-lg-3 col-md-6 text-center">
-            <img src="/static/images/paystack-logo.png" alt="Image" class="img-fluid logo-3">
-          </div>
-          <div class="col-6 col-lg-3 col-md-6 text-center">
-            <img src="/static/images/logo_visa.svg" alt="Image" class="img-fluid logo-4">
-          </div>
-        </div>
-      </div>
-    </section>
-
-
-    <section class="py-5 bg-image overlay-primary fixed overlay" style="background-image:linear-gradient(to top,rgba(0, 0, 0, 0.7),rgba(1, 107, 9, 0.5)), url('/static/images/decagon.jpg'); padding-top: 8%;" id="home-section ">
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-md-8">
-            <h2 class="text-white">Looking For A Job?</h2>
-            <p class="mb-0 text-white lead">Your surest link to a wealth of dream jobs, seize the opportunity today</p>
-          </div>
-          <div class="col-md-3 ml-auto">
-            <a href="/register" class="btn btn-warning btn-block btn-lg">Sign Up</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
+   
     <footer class="site-footer">
       <div class="container">
         <div class="row mb-5">
@@ -181,7 +143,7 @@
             <h3>Company</h3>
             <ul class="list-unstyled">
               <li><a href="/about">About</a></li>
-              <li><a href="/job-listings">Job Listing</a></li>
+              <li><a href="/job_listing">Job Listing</a></li>
               <li><a href="/contact">Contact Us</a></li>
             </ul>
           </div>

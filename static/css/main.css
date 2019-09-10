@@ -238,9 +238,10 @@ iframe {
 .custom-select{
   background-color: transparent;
   margin-top:10px;
-  width:78%;
+  width:100%;
   border:0px;
-  color:#aaa
+  color:#aaa;
+  padding-left:0px;
   ;
 }
 

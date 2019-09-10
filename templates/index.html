@@ -82,7 +82,7 @@
           <nav class="mx-auto site-navigation">
             <ul class="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
               <li><a href="/about">About</a></li>
-              <li><a href="/job-listings">Job Listings</a></li>
+              <li><a href="/job_listing">Job Listings</a></li>
               <li><a href="/contact">Contact Us</a></li>
 
               <li class="d-lg-none"><a href="/login">Login</a></li>
@@ -146,12 +146,12 @@
         </div>
     </section>
 
-    <section class="py-5 bg-image overlay-primary fixed overlay" style="background-image:linear-gradient(to top,rgba(0, 0, 0, 0.7),rgba(1, 107, 9, 0.8)), url('/static/images/decagon.jpg');">
+    <section class="py-5 bg-image overlay-primary fixed overlay" style="background-image:linear-gradient(to top,rgba(0, 0, 0, 0.7),rgba(1, 107, 9, 0.5)), url('/static/images/decagon.jpg');">
       <div class="container">
         <div class="row mb-5 justify-content-center">
           <div class="col-md-7 text-center">
             <h2 class="section-title mb-2 text-white">Careers Statistics</h2>
-            <p class="lead text-white">Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita unde officiis recusandae sequi excepturi corrupti.</p>
+            <p class="lead text-white">The numbers says it all</p>
           </div>
         </div>
         <div class="row pb-0 block__19738 section-counter">
@@ -217,7 +217,7 @@
               <div class="col-md-3 text-md-right">
                 Salary<br/>
                 <strong class="text-black">&#8358;{{job['salary']}}</strong>
-                <p class="meta"><strong><a href="job_search.html" class="btn btn-success mt-3 px-2 py-1 mb-3">Apply</a></strong></p>
+                <p class="meta"><strong><a href="/job_details?jobID={{job['id']}}" class="btn btn-success mt-3 px-2 py-1 mb-3">Apply</a></strong></p>
               </div>
             </div>
             {% endfor %}
@@ -260,7 +260,7 @@
               </p>
           </div>
           <div class="col-md-3 ml-auto">
-            <a href="/register" class="btn btn-warning btn-block btn-lg">Sign Up</a>
+            <a href="/job_listing" class="btn btn-warning btn-block btn-lg">Explore</a>
           </div>
         </div>
       </div>
@@ -272,7 +272,7 @@
             <h3>Company</h3>
             <ul class="list-unstyled">
               <li><a href="/about">About</a></li>
-              <li><a href="/job-listings">Job Listing</a></li>
+              <li><a href="/job_listing">Job Listing</a></li>
               <li><a href="/contact">Contact Us</a></li>
             </ul>
           </div>
