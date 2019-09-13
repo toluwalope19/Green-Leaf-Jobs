@@ -72,7 +72,8 @@ def login():
                         if rows[0]["user_type"] == "employer":
 
                           # get list of vacancies
-                            list_of_vacancies = fetch_vancacies(db)
+                            list_of_vacancies = db.execute("SELECT * FROM vacancies INNER JOIN users "+
+        "ON vacancies.user_id=users.id INNER JOIN job_functions ON vacancies.job_func_id=job_functions.id WHERE vacancies.user_id = :uid ORDER BY id DESC", uid=session["user"][0]["id"])
 
                             vac = []
                             if len(list_of_vacancies) > 0:
@@ -94,11 +95,11 @@ def login():
                         # admin login logic
                         else:
                             # get list of users
-                            list_of_users = db.execute("SELECT * FROM users")
+                            list_of_users = db.execute("SELECT * FROM users ORDER BY id DESC ")
                             # get list of vacancies
                             list_of_vacancies = fetch_vancacies(db)
                             # get list of applications
-                            list_of_applications = db.execute("SELECT * FROM application")
+                            list_of_applications = db.execute("SELECT * FROM application INNER JOIN vacancies ON application.vacancy_id=vacancies.id  ORDER BY id DESC ")
 
                             usr =[]
                             vac = []

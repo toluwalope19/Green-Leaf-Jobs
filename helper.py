@@ -35,7 +35,7 @@ def loctn_function(db):
 #fetch Vacancies
 def fetch_vancacies(db):
     list_of_vacancies = db.execute("SELECT * FROM vacancies INNER JOIN users "+
-        "ON vacancies.user_id=users.id INNER JOIN job_functions ON vacancies.job_func_id=job_functions.id")
+        "ON vacancies.user_id=users.id INNER JOIN job_functions ON vacancies.job_func_id=job_functions.id ORDER BY id DESC")
     return list_of_vacancies
 
 
