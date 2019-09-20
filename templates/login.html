@@ -5,10 +5,10 @@
 	<title>Account Login</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-<!--===============================================================================================-->	
+<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="/static/vendor/bootstrap/css/bootstrap.min.css">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="/static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">		
+	<link rel="stylesheet" type="text/css" href="/static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="/static/css/util.css">
 	<link rel="stylesheet" type="text/css" href="/static/css/animated.min.css">
@@ -16,14 +16,17 @@
 <!--===============================================================================================-->
 </head>
 <body>
-	
-	<div class="limiter">
+    <!--  -->
+	<div class="limiter" style="background:#eee;">
+		<div class="site-logo col-12 ml-5 pl-5 pt-5" style="position: relative; z-index: 2;" ><a href="/" style="font-size:35px;  font-family:arial; text-transform:capitalize;"><b><span style="color:#fff;text-shadow: 0px 0px 4px #555; ">Green</span><span style="color:#0f0;">Leaf</span></b></a></div>
 		<div class="container-login100">
-			<div class="F p-l-55 p-r-55 p-t-65 p-b-50">
-				<form class="login100-form fadeInDown animated  validate-form">
+			<div class="F p-l-55 p-r-55 p-t-65 p-b-50" style="width:30%; margin-top:-100px">
+				<form class="login100-form fadeInDown animated  validate-form" method="post" action="/login">
 					<span class="login100-form-title p-b-33">
-						<i class="fa fa-lock"></i> Account Login
+						<small><i class="fa fa-lock"></i> Login</small>
 					</span>
+
+						<div class="messagebox text-warning" style="text-align: center;"><i class="fa fa-information-circle"></i> {{msg}}</div>
 
 					<div class="wrap-input100 fadeInDown animated validate-input" data-validate = "Valid email is required: ex@abc.xyz">
 						<input class="input100" type="text" name="email" placeholder="Email">
@@ -42,8 +45,17 @@
 							Sign in
 						</button>
 					</div>
-
 					<div class="text-center fadeInDown animated  p-t-45 p-b-4">
+						<span class="txt1">
+							Don't have an account yet?
+						</span>
+
+						<a href="/register" class="txt2 hov1">
+							Create account
+						</a>
+					</div>
+
+					<div class="text-center fadeInDown animated ">
 						<span class="txt1">
 							Forgot
 						</span>
@@ -53,22 +65,10 @@
 						</a>
 					</div>
 
-					<div class="text-center fadeInDown animated ">
-						<span class="txt1">
-							Create an account?
-						</span>
-
-						<a href="#" class="txt2 hov1">
-							Sign up
-						</a>
-					</div>
 				</form>
 			</div>
 		</div>
 	</div>
-	
-
-	
 <!--===============================================================================================-->
 	<script src="/static/vendor/jquery/jquery-3.2.1.min.js"></script>
 <!--===============================================================================================-->

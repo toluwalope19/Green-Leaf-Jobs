@@ -407,6 +407,7 @@ body {
   line-height: 1.7;
   position: relative; }
   body:after {
+    min-width:300px;
     content: "";
     position: absolute;
     top: 0;
@@ -580,6 +581,7 @@ h1, h2, h3, h4 {
       right: 0;
       bottom: 0;
       background: rgba(1, 107, 9, 0.3);
+      /*background: rgba(22, 186, 131, 0.9);*/
       z-index: 1; }
     .bg-image.overlay-primary > .container {
       position: relative;
@@ -1668,3 +1670,7 @@ h1, h2, h3, h4 {
   color: #b5b5b5; }
   .job-item .meta strong {
     color: #3c3c3c; }
+<<<<<<< HEAD
+>>>>>>> c2f6f769a4f41e137219192c4c182ad14894dd5f
+=======
+>>>>>>> 7e418dc0395893ee5557bc6b07939b49e1612899

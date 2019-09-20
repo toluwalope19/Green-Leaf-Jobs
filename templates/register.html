@@ -2,13 +2,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Account Login</title>
+	<title>Create Account</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-<!--===============================================================================================-->	
+<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="/static/vendor/bootstrap/css/bootstrap.min.css">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="/static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">		
+	<link rel="stylesheet" type="text/css" href="/static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="/static/css/util.css">
 	<link rel="stylesheet" type="text/css" href="/static/css/animated.min.css">
@@ -16,7 +16,7 @@
 <!--===============================================================================================-->
 
 
-            
+
     <style>
         .sign-up2{
             display:none;
@@ -24,28 +24,30 @@
     </style>
 </head>
 <body>
-    
-    
-    
-	<div class="limiter">
+
+
+
+	<div class="limiter" style="background:#eee;">
 		<div class="container-login100">
 
-			<div class="F p-l-55 p-r-55 p-t-65 p-b-50">
-				<form class="login100-form fadeInDown animated sign-up1  validate-form" method="post" action="/login">
+			<div class="site-logo col-12 ml-5 pl-5 pt-5" style="position: relative; z-index: 2;" ><a href="/" style="font-size:35px;  font-family:arial; text-transform:capitalize;"><b><span style="color:#fff;text-shadow: 0px 0px 4px #555; ">Green</span><span style="color:#0f0;">Leaf</span></b></a></div>
+		
+			<div class="F p-l-55 p-r-55 p-t-65 p-b-50" style=" margin-top:-60px">
+				<form class="login100-form fadeInDown animated  validate-form" method="post" action="/register">
 					<span class="login100-form-title p-b-33" style="font-size: 27px;">
 						<i class="fa fa-user"></i> Create Account
                     </span>
-                    
-                    
+
+
 						<div class="messagebox text-warning" style="text-align: center;"><i class="fa fa-information-circle"></i> {{msg}}</div>
 
 					<div class="wrap-input100 fadeInDown animated validate-input">
-						<input class="input100" type="text" name="firstname" placeholder="Input firstname">
+						<input class="input100" type="text" name="first_name" placeholder="First name">
 						<span class="focus-input100-1"></span>
 						<span class="focus-input100-2"></span>
                     </div>
                     <div class="wrap-input100 fadeInDown animated validate-input">
-						<input class="input100" type="text" name="lastname" placeholder="Input lastname">
+						<input class="input100" type="text" name="last_name" placeholder="Last name">
 						<span class="focus-input100-1"></span>
 						<span class="focus-input100-2"></span>
 					</div>
@@ -61,25 +63,24 @@
 						<span class="focus-input100-2"></span>
                     </div>
                     <div class="wrap-input100 fadeInDown animated  rs1 validate-input" data-validate="Password is required">
-						<input class="input100" type="password" name="password" placeholder="confirm password">
+						<input class="input100" type="password" name="confirm_password" placeholder="Confirm password">
 						<span class="focus-input100-1"></span>
 						<span class="focus-input100-2"></span>
                     </div>
-                   
+
 					<div class="wrap-input100 fadeInDown animated validate-input" >
-						<input class="input100" type="text" name="address" placeholder="Input Address">
+						<input class="input100" type="text" name="address" placeholder="Address">
 						<span class="focus-input100-1"></span>
 						<span class="focus-input100-2"></span>
 					</div>
 					<div class="col-auto my-1 wrap=input100 mr-8" style="margin-left:13px;">
-							<label class="mr-sm-2" for="inlineFormCustomSelect" style="color: gray;">User Type</label>
-							<select class="custom-select mr-sm-2 category" id="inlineFormCustomSelect">
+							<label class="mr-sm-2" for="inlineFormCustomSelect">User Type</label>
+							<select class="custom-select mr-sm-2 category" id="inlineFormCustomSelect" name="user_type">
 							  <option class="input100 " disabled selected>---select---</option>
-							  <option value="applicant">Applicant</option>
 							  <option value="employer">Employer</option>
 							</select>
 						  </div>
-                          
+
 					<div class="container-login100-form-btn fadeInDown animated  m-t-20">
 						<button class="login100-form-btn">
 							Create Account
@@ -91,7 +92,7 @@
 						<span class="txt1">
 							Already have an account?
 						</span>
-							
+
 						<a href="/login" class="txt2 hov1">
 							Login
 						</a>
@@ -100,15 +101,7 @@
 			</div>
 		</div>
     </div>
-    
-
-
-
-
-   
-
-	
-<!--===============================================================================================-->
+  <!--===============================================================================================-->
 	<script src="/static/vendor/jquery/jquery-3.2.1.min.js"></script>
 <!--===============================================================================================-->
 <!--===============================================================================================-->

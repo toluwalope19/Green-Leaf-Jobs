@@ -1,0 +1,173 @@
+<!doctype html>
+<html>
+    <head>
+            <link rel="stylesheet" type="text/css" href="../../static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">		
+            <link rel="stylesheet" type="text/css" href="../../static/css/admin.css">	
+            <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
+
+            
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="../../static/vendor/bootstrap/css/bootstrap.min.css">	
+    <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" href="../../static/css/util.css">
+        <link rel="stylesheet" type="text/css" href="../../static/css/animated.min.css">
+        <link rel="stylesheet" type="text/css" href="../../static/css/main.css">
+    <!--===============================================================================================-->
+
+        <title>Green Leaf Jobs | Employer</title>
+    </head>
+    <body style="background:rgba(108, 196, 112, 0.13); font-family: arial;">
+        <div class="main-container">
+            <div class='aside' id="asideBox">
+                <div style="background: rgba(122, 240, 128, 0.938); padding:20px; box-sizing: border-box;" >
+                    <a href="#" style="font-size:30px; text-transform:capitalize;"><b><span style="color:white;">Green</span><span style="color:green;">Leaf</b></span></a>
+                </div>
+                <div class='user-profile bordered'>
+                    <img src="{{pix}}">
+                </div>
+                <div style="font-size: 12px;text-align: center;">
+                    <div><b>{{name}}</b></div>
+                    <b>Logged-in at {{logintime}}</b>
+                </div>
+                <div class="admin-menu">
+                    <a href='javascript:void()'><span class='active nav-list' name="users-nav">Jobs Vacancies</span></a>
+                    <a href='javascript:void()'><span class='nav-list'>Add Job Vacancy</span></a>
+                    <a href='javascript:void()'><span class='nav-list'>Add Company</span></a>
+                    <a href='javascript:void()'><span class='nav-list'>Setting</span></a>
+                </div>
+            </div>
+            <div class="main-side" id="mainBox">
+                <div class='header-bar'><a href="#" id='navicon'><i class='fa fa-navicon fa-2x'></i></a> 
+                    <span class="logout">
+                        <i class='fa fa-user'></i> <small></small>Logged-in as {{usertype}}</small> &nbsp; | &nbsp; <a href='../../logout'><font color="#f66"><i class='fa fa-power-off'></i> Log-out</font></a>
+                    </span>
+                </div>
+                
+                <div class='summary-stats' style="height:140px;"><div class='summary-stats bordered' style="border-color:#6f6;"></div></div>
+
+            <!--- vacancies display table--->
+            <div id="vacancies" class="display">
+                <div class='main-display-area'>
+                    <div style="padding:20px;">
+                        <div class="users-table"><p><big><div class="messagebox text-warning" style="text-align: center;"><i class="fa fa-information-circle"></i> {{msg}}</div></big></p>
+                            <div class='tab-bar'>
+                                <div>ADDED VACANCIES RECORDS</div>
+                            </div>
+                            
+                            <table class="fadeInDown animated  table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>position</th>
+                                        <th>salary</th>
+                                        <th>job type</th>
+                                        <th>job function</th>
+                                        <th>description</th>
+                                        <th>requirement</th>
+                                        <th><center>action</center></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for vacancy in vacancies %}
+                                    <tr>
+                                        <td>{{vacancy["position"]}}</td>
+                                        <td>{{vacancy["salary"]}}</td>
+                                        <td>{{vacancy["job_type"]}}</td>
+                                        <td>{{vacancy["job_function"]}}</td>
+                                        <td>{{vacancy["description"]}}</td>
+                                        <td>{{vacancy["requirement"]}}</td>
+                                        <td><center><a href="/delete?id={{vacancy['id']}}&table=vacancy&loc=ad&"><i class="fa fa-trash"></i></a></center></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                                <tfoot></tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--- end of vacancies display table--->
+
+            <!--- add job display table--->
+            <div id="job" class="display">
+                <div class='main-display-area'>
+                    <div style="padding:20px;">
+                        <div class='tab-bar'>
+                                        <div class="messagebox text-warning" style="text-align: center;"><i class="fa fa-information-circle"></i> {{msg}}</div>
+                            <div><i class="fa fa-edit"></i> ADD JOB</div>
+                        </div>
+                        
+                                <div class="F p-w-55 p-b-50">
+                                    <form class="login100-form fadeInDown animated  validate-form" method="post" action="/vacancies">
+                
+                                        <div class="wrap-input100 fadeInDown animated validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+                                            <input class="input100" type="text" name="position" id="position" placeholder="Position">
+                                            <span class="focus-input100-1"></span>
+                                            <span class="focus-input100-2"></span>
+                                        </div>
+                                        
+                                        
+                    
+                                        <div class="wrap-input100 fadeInDown animated  rs1 validate-input" data-validate="Password is required">
+                                            <input class="input100" type="number" name="salary" id="salary" placeholder="Salary">
+                                            <span class="focus-input100-1"></span>
+                                            <span class="focus-input100-2"></span>
+                                        </div>
+                                        
+                                        <div class="col-auto my-1 wrap-input100 fadeInDown animated" style="margin-left:13px;">
+                                                <label class="mr-sm-2" for="inlineFormCustomSelect" style="COLOR:GRAY";></label>
+                                                <select class="custom-select mr-sm-2 category" id="inlineFormCustomSelect" name="job_type" id="job_type">
+                                                    <option>---Select User Type---</option>
+                                                    <option value="Full Time">Full Time</option>
+                                                    <option value="Part Time">Part Time</option>
+                                                    <option value="Freelance">Freelance</option>
+                                                </select>
+                                                <span class="focus-input100-1"></span>
+                                                <span class="focus-input100-2"></span>
+                                            </div>
+                    
+                                            <div class="col-auto my-1 wrap-input100 fadeInDown animated" style="margin-left:13px;">
+                                                    <label class="mr-sm-2" for="inlineFormCustomSelect" style="COLOR:GRAY";></label>
+                                                    <select class="custom-select mr-sm-2 category" id="inlineFormCustomSelect" name="job_func_id" id="job_func_id">
+                                                        <option>---Select Job Function---</option>
+                                                        {% for job in jf %}
+                                                            <option value="{{job['id']}}">{{job["job_function"]}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                    <span class="focus-input100-1"></span>
+                                                    <span class="focus-input100-2"></span>
+                                                </div>
+                    
+                                        <div class="wrap-input100 fadeInDown animated  rs1 validate-input" data-validate="">
+                                            <textarea class="input100"  name="description" id="description" rows="3" placeholder="Description" style='height:140px; padding: 25px;'></textarea>
+                                            <span class="focus-input100-1"></span>
+                                            <span class="focus-input100-2"></span>
+                                        </div>
+                                        
+                                        <div class="wrap-input100 fadeInDown animated  rs1 validate-input" data-validate="">
+                                            <textarea class="input100" name="requirement" id="requirement" rows="5" placeholder="Requirements" style='height:140px; padding: 25px;'></textarea>
+                                            <span class="focus-input100-1"></span>
+                                            <span class="focus-input100-2"></span>
+                                        </div>
+                    
+                                        <div class="container-login100-form-btn fadeInDown animated  m-t-20">
+                                            <button class="login100-form-btn" type="submit" id="login100-form-btn">
+                                                Submit
+                                            </button>
+                                        </div>
+                                        </div>
+                                    </form>
+                                </div>
+                </div>
+            </div>
+            <!--- end of vacancies display table--->
+
+           
+            </div>
+
+
+
+        </div>
+    </body>
+</html>
+
+<script src="../../static/js/green_leaf.js"></script>

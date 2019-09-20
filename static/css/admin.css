@@ -23,3 +23,35 @@
 .sidebar li a{
     color:rgba(128, 128, 128, 0.952);
 }
+body{margin:0px; font-family: arial;background: rgba(122, 240, 128, 0.123); color:#666;}
+a{text-decoration: none; color:green;} a:hover{text-decoration: none;}
+div{background: transparent;}
+.aside{
+    width:200px;
+    position:fixed;
+    height: 100%;
+    background: #fff;
+    transition:width ease-in .5s;
+    overflow: hidden;
+}
+.main-side{margin-left:200px;transition:margin ease-in .5s;}
+.displday{display: none;}
+.bordered{border:1px solid grey;}
+.header-bar{background: rgba(122, 240, 127, 0.301);color:green; 
+    height: 85px; overflow: hidden; padding:20px;
+    line-height:25px;
+}
+.summary-stats{height:160px; padding:20px; width:100%; box-sizing:border-box;}
+.user-profile{width:150px; height:150px; margin:0px auto; border-radius:100%; border:5px solid #bfb; margin:20px; overflow: hidden;}
+.user-profile img{width:inherit; height:inherit;}
+.admin-menu{font-size: 14px;text-align: center; padding:20px 2px;}
+.admin-menu a{border-bottom:1px solid #6f6; display: block;}
+.admin-menu a:hover{background:rgba(78, 245, 56, 0.055);}
+.admin-menu a:first-child{border-top:1px solid #6f6;}
+.admin-menu a .active{border-left:5px solid rgb(78, 245, 56); background:rgba(78, 245, 56, 0.26); border-top:0px; border-bottom:0px;}
+.admin-menu a span{display:block; padding:10px;}
+th{text-transform: capitalize; background: #6c6; color:#cfc;}
+.tab-bar{padding:20px 0px; font-weight:bold; color:green;}
+table{width:100%; border-collapse: collapse;}
+table td, table th{padding:10px; text-align: left;}
+.logout{width:45%; min-width:300px; text-align: right; display:inline-block; float:right; clear:right;}

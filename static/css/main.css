@@ -25,6 +25,7 @@ body, html {
 	height: 100%;
 	font-family: OpenSans-Regular, sans-serif;
   font-family: arial;
+  min-width:300px;
 }
 
 .text-center a{color:#076426c2}
@@ -150,7 +151,11 @@ iframe {
   justify-content: center;
   align-items: center;
   padding: 15px;
-  background: rgba(108, 196, 113, 0.137);
+<<<<<<< HEAD
+  background: rgba(108, 196, 112, 0.404);
+=======
+  background: rgba(108, 196, 112, 0.267);
+>>>>>>> 7e418dc0395893ee5557bc6b07939b49e1612899
 }
 
 .messagebox{font-size:13px;}
@@ -181,7 +186,8 @@ iframe {
   line-height: 1.2;
   text-align: center;
   font-size:35px;
-  width:300px;
+  width:100%x;
+  text-transform: uppercase;
 }
 
 /*------------------------------------------------------------------
@@ -190,12 +196,14 @@ iframe {
 .wrap-input100 {
   width: 100%;
   position: relative;
-  border-bottom: 1px solid #e6e6e6;
+  border-bottom: 1px solid #478d4533;
+  color:#555;
 }
 
 .wrap-input100.rs1 {
   border-top: none;
 }
+
 
 .input100 {
   display: block;
@@ -214,6 +222,27 @@ iframe {
   font-size: 15px;
   color: #555;
   line-height: 1.2;
+}
+
+
+.category {
+  
+  background: transparent;
+  font-family:arial;
+  font-size: 15px;
+  color: #555;
+  line-height: 1.2;
+}
+
+
+.custom-select{
+  background-color: transparent;
+  margin-top:10px;
+  width:100%;
+  border:0px;
+  color:#aaa;
+  padding-left:0px;
+  ;
 }
 
 
@@ -318,6 +347,7 @@ input.input100 {
   }
 }
 
+.col-auto label{color:#888;}
 
 /*------------------------------------------------------------------
 [ Button ]*/
